@@ -56,4 +56,6 @@ target/
 .DS_Store
 .ipynb_checkpoints/
 raw-data/*
+raw-data/txts/*
+raw-data/txts
 
