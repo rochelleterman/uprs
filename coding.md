@@ -6,12 +6,12 @@ We should create a long numerical list of abbreviations and full names of treati
 2. ICC, International Criminal Court, Rome Statute
 3. ICCPR, International Covenant on Civil and Political Rights
 4. CAT, Convention Against Torture
-5. OPCAT, Optional Protocol Convention Against Torture
+5. OPCAT, Optional Protocol Convention Against Torture [RT: Should this be distinct from the dict above? In other words, if a rec just discusses OPCAT, should it be not also be coded as CAT? I guess we can easily distinguish the two later, if a rec gets 1 but not the other...]
 6. CEDAW, Convention on the Elimination of all Forms of Discrimination Against Women
 7. Covenant on Economic, Social and Cultural Rights, CESR
 8. “National Human Rights commission” “Paris Principles
 9. Human Rights Committee
-10. ETCETERA
+10. RT: CRC
 
 #### II. Code action states are recommended to take
 
