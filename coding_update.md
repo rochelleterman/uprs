@@ -1,6 +1,6 @@
 ### Summary:
 
-1. Three tags: Institutions, Actions, and Themes
+1. Three tags: Institutions (32), Actions (10), and Themes (44)
 2. 99.87 of the recs have been tagged with either an institution or a theme.
 3. Institutions are easier to tag than themes
 
@@ -66,100 +66,100 @@
 
 ####physical integrity rights
 
-1. **torture** = ['torture', 'inhuman degrading treatment', 'corporal punishment', 'stoning', 'amputation', 'caning', 'whipping']
+- **torture** = ['torture', 'inhuman degrading treatment', 'corporal punishment', 'stoning', 'amputation', 'caning', 'whipping']
 
-2. **trafficking** = ['slavery', 'forced labor', 'forced labour', 'traffick', 'abduct', 'kidnap']
+- **trafficking** = ['slavery', 'forced labor', 'forced labour', 'traffick', 'abduct', 'kidnap']
 
-3. **prison** = ['prison', 'police', 'interrogation', 'detainees', 'security force', 'security personnel', 'security official', 'detention', 'detained', 'law enforc', 'incarceration', 'solitary confinement']
+- **prison** = ['prison', 'police', 'interrogation', 'detainees', 'security force', 'security personnel', 'security official', 'detention', 'detained', 'law enforc', 'incarceration', 'solitary confinement']
 
-4. **disappearances** = ['disappearances','disappeared']
+- **disappearances** = ['disappearances','disappeared']
 
-5. **death-pen** = ['death penalty', 'extrajudicial', 'capital punishment', 'death sentence', 'executions', 'capital sentence']
+- **death-pen** = ['death penalty', 'extrajudicial', 'capital punishment', 'death sentence', 'executions', 'capital sentence']
 
 ####political rights####
 
-6. **migration** ['migration', 'migrant', 'refugee', 'displaced', 'asylum', 'displacements', 'idps', 'eviction', 'statelessness']
+- **migration** ['migration', 'migrant', 'refugee', 'displaced', 'asylum', 'displacements', 'idps', 'eviction', 'statelessness']
 
-7. **speech** = ['speech', 'expression', 'journalis', 'opinion', ' press ', ' media', 'insult law', 'defamation', 'political dissent', 'newspapers']
+- **speech** = ['speech', 'expression', 'journalis', 'opinion', ' press ', ' media', 'insult law', 'defamation', 'political dissent', 'newspapers']
 
-8. **religion** = ['religio', 'church', 'muslim', 'blasphemy', 'apostasy']
+- **religion** = ['religio', 'church', 'muslim', 'blasphemy', 'apostasy']
 
-9. **judiciary** = ['judiciary', 'judicial', 'fair trial', 'court', 'judge', 'defendants', 'prosecutor', 'lawyer', 'legal representation', 'tribunal', 'legal aid', "due process"]
+- **judiciary** = ['judiciary', 'judicial', 'fair trial', 'court', 'judge', 'defendants', 'prosecutor', 'lawyer', 'legal representation', 'tribunal', 'legal aid', "due process"]
 
-10. **privacy** = ['privacy']
+- **privacy** = ['privacy']
 
 #### soc, cul, econ. rights
 
-11. **poverty** = ['poverty','social security','pension','social safety net']
+-. **poverty** = ['poverty','social security','pension','social safety net']
 
-12. **health** = ['health','hospital','doctor','medical','disease']
+- **health** = ['health','hospital','doctor','medical','disease']
 
-13. **hiv** = ['hiv']
+- **hiv** = ['hiv']
 
-14. **food** = ['food','hungry']
+- **food** = ['food','hungry']
 
-15. **infrastructure** = ['water','sanitation','housing','roads','right development','living standard','homeless']
+- **infrastructure** = ['water','sanitation','housing','roads','right development','living standard','homeless']
 
-16. **labor** = [' labor','labour','strike','unions','worker','employment']
+- **labor** = [' labor','labour','strike','unions','worker','employment']
 
-17. **education** = ['education','illiter','school']
+- **education** = ['education','illiter','school']
 
-18. **property** = ['property','properties']
+- **property** = ['property','properties']
 
-19. **land** = ['land rights']
+- **land** = ['land rights']
 
-20. **culture** = ['cultural rights','cultural values','traditions']
+- **culture** = ['cultural rights','cultural values','traditions']
 
 #### vuln. populations
 
-21. **children** = ['child', 'juvenile', 'minors', 'girl', 'minimum age', 'age criminal responsibility']
+- **children** = ['child', 'juvenile', 'minors', 'girl', 'minimum age', 'age criminal responsibility']
 
-22. **lgbt** = ['lgbt', 'lesbian', 'gay', 'homosexual', 'transsexual', 'sexual orientation', 'gender identity', 'consensual sex', 'same-sex', 'same sex', 'homophobia', 'between consenting adults']
+- **lgbt** = ['lgbt', 'lesbian', 'gay', 'homosexual', 'transsexual', 'sexual orientation', 'gender identity', 'consensual sex', 'same-sex', 'same sex', 'homophobia', 'between consenting adults']
 
-23. **ethnic** = ['tribal area', 'vulnerable population', 'roma', 'ethnic', 'minorit', 'xenophobi']
+- **ethnic** = ['tribal area', 'vulnerable population', 'roma', 'ethnic', 'minorit', 'xenophobi']
 
-24. **indigenous** = ['indigenous', 'aboriginal']
+- **indigenous** = ['indigenous', 'aboriginal']
 
-25. **race** = ['race', 'racial', 'racism']
+- **race** = ['race', 'racial', 'racism']
 
-26. **disabilities** = ['disabilit', 'disabled']
+- **disabilities** = ['disabilit', 'disabled']
 
-27. **women** = ['women', 'gender', 'misogyn', 'widows', 'girl']
+- **women** = ['women', 'gender', 'misogyn', 'widows', 'girl']
 
-28. **sex-violence** = ['domestic violence', 'sexual violence', 'rape', 'domestic abuse', 'sexual abuse', prostitut', 'gender-based violence', 'violence against women', 'prostitut']
+- **sex-violence** = ['domestic violence', 'sexual violence', 'rape', 'domestic abuse', 'sexual abuse', prostitut', 'gender-based violence', 'violence against women', 'prostitut']
 
-29. **discrimination** = ['discriminat', 'advancement', 'stereotyp', 'attitude', 'role responsibilit', 'equal']
+- **discrimination** = ['discriminat', 'advancement', 'stereotyp', 'attitude', 'role responsibilit', 'equal']
 
-30. **harm-trad** = ['fgm', 'genital', 'early marriage', 'forced marriage', 'harmful traditional practices', 'sexual mutilation', 'polygamy','witch']
+- **harm-trad** = ['fgm', 'genital', 'early marriage', 'forced marriage', 'harmful traditional practices', 'sexual mutilation', 'polygamy','witch']
 
-31. **reproductive** = ['reproductive', 'abortion', 'birth control', 'maternal', 'family planning']
+- **reproductive** = ['reproductive', 'abortion', 'birth control', 'maternal', 'family planning']
 
-32. **elderly** = ['elderly']
+- **elderly** = ['elderly']
 
 #### political conflict
 
-33. **conflict** = ['truth commission', 'reconstruction', 'post-conflict', 'reconciliation', 'civil war', 'post conflict', 'civil conflict', 'armed conflict']
+- **conflict** = ['truth commission', 'reconstruction', 'post-conflict', 'reconciliation', 'civil war', 'post conflict', 'civil conflict', 'armed conflict']
 
-34. **governance** = ['good governance', 'rule law', 'stability', 'public governance']
+- **governance** = ['good governance', 'rule law', 'stability', 'public governance']
 
-35. **corruption** = ['corruption', 'bribary', 'bribe', 'bribing', 'extortion']
+- **corruption** = ['corruption', 'bribary', 'bribe', 'bribing', 'extortion']
 
-36. **environment** = ['environment', 'pollution', 'climate change']
+- **environment** = ['environment', 'pollution', 'climate change']
 
-37. **democ** = ['democrat', 'election']
+- **democ** = ['democrat', 'election']
 
-38. **self-determ** =['self-determination', 'self determination']
+- **self-determ** =['self-determination', 'self determination']
 
-40. **socialism** = ['socialism','communism']
+- **socialism** = ['socialism','communism']
 
-41. **civil-so** = ['civil society','rights defenders', 'charities', 'protest', 'activist', 'demonstrator', 'freedom assembly', 'freedom association', 'free association', 'free assembly', 'demonstrations','NGO']
+- **civil-so** = ['civil society','rights defenders', 'charities', 'protest', 'activist', 'demonstrator', 'freedom assembly', 'freedom association', 'free association', 'free assembly', 'demonstrations','NGO']
 
-42. **terrorism** = ['terroris']
+- **terrorism** = ['terroris']
 
-43. **crime-humanity** = ['war crime','crimes humanity','genocide','massacre']
+- **crime-humanity** = ['war crime','crimes humanity','genocide','massacre']
 
 #### human rights violations
 
-44. **impunity** = ['impunity', 'immunity from prosecution']
+- **impunity** = ['impunity', 'immunity from prosecution']
 
 
