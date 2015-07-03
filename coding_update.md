@@ -66,100 +66,100 @@
 
 ####physical integrity rights
 
-**torture** = ['torture', 'inhuman degrading treatment', 'corporal punishment', 'stoning', 'amputation', 'caning', 'whipping']
+1. **torture** = ['torture', 'inhuman degrading treatment', 'corporal punishment', 'stoning', 'amputation', 'caning', 'whipping']
 
-**trafficking** = ['slavery', 'forced labor', 'forced labour', 'traffick', 'abduct', 'kidnap']
+2. **trafficking** = ['slavery', 'forced labor', 'forced labour', 'traffick', 'abduct', 'kidnap']
 
-**prison** = ['prison', 'police', 'interrogation', 'detainees', 'security force', 'security personnel', 'security official', 'detention', 'detained', 'law enforc', 'incarceration', 'solitary confinement']
+3. **prison** = ['prison', 'police', 'interrogation', 'detainees', 'security force', 'security personnel', 'security official', 'detention', 'detained', 'law enforc', 'incarceration', 'solitary confinement']
 
-**disappearances** = ['disappearances','disappeared']
+4. **disappearances** = ['disappearances','disappeared']
 
-**death-pen** = ['death penalty', 'extrajudicial', 'capital punishment', 'death sentence', 'executions', 'capital sentence']
+5. **death-pen** = ['death penalty', 'extrajudicial', 'capital punishment', 'death sentence', 'executions', 'capital sentence']
 
 ####political rights####
 
-**migration** ['migration', 'migrant', 'refugee', 'displaced', 'asylum', 'displacements', 'idps', 'eviction', 'statelessness']
+6. **migration** ['migration', 'migrant', 'refugee', 'displaced', 'asylum', 'displacements', 'idps', 'eviction', 'statelessness']
 
-**speech** = ['speech', 'expression', 'journalis', 'opinion', ' press ', ' media', 'insult law', 'defamation', 'political dissent', 'newspapers']
+7. **speech** = ['speech', 'expression', 'journalis', 'opinion', ' press ', ' media', 'insult law', 'defamation', 'political dissent', 'newspapers']
 
-**religion** = ['religio', 'church', 'muslim', 'blasphemy', 'apostasy']
+8. **religion** = ['religio', 'church', 'muslim', 'blasphemy', 'apostasy']
 
-**judiciary** = ['judiciary', 'judicial', 'fair trial', 'court', 'judge', 'defendants', 'prosecutor', 'lawyer', 'legal representation', 'tribunal', 'legal aid', "due process"]
+9. **judiciary** = ['judiciary', 'judicial', 'fair trial', 'court', 'judge', 'defendants', 'prosecutor', 'lawyer', 'legal representation', 'tribunal', 'legal aid', "due process"]
 
-**privacy** = ['privacy']
+10. **privacy** = ['privacy']
 
 #### soc, cul, econ. rights
 
-**poverty** = ['poverty','social security','pension','social safety net']
+11. **poverty** = ['poverty','social security','pension','social safety net']
 
-**health** = ['health','hospital','doctor','medical','disease']
+12. **health** = ['health','hospital','doctor','medical','disease']
 
-**hiv** = ['hiv']
+13. **hiv** = ['hiv']
 
-**food** = ['food','hungry']
+14. **food** = ['food','hungry']
 
-**infrastructure** = ['water','sanitation','housing','roads','right development','living standard','homeless']
+15. **infrastructure** = ['water','sanitation','housing','roads','right development','living standard','homeless']
 
-**labor** = [' labor','labour','strike','unions','worker','employment']
+16. **labor** = [' labor','labour','strike','unions','worker','employment']
 
-**education** = ['education','illiter','school']
+17. **education** = ['education','illiter','school']
 
-**property** = ['property','properties']
+18. **property** = ['property','properties']
 
-**land** = ['land rights']
+19. **land** = ['land rights']
 
-**culture** = ['cultural rights','cultural values','traditions']
+20. **culture** = ['cultural rights','cultural values','traditions']
 
 #### vuln. populations
 
-**children** = ['child', 'juvenile', 'minors', 'girl', 'minimum age', 'age criminal responsibility']
+21. **children** = ['child', 'juvenile', 'minors', 'girl', 'minimum age', 'age criminal responsibility']
 
-**lgbt** = ['lgbt', 'lesbian', 'gay', 'homosexual', 'transsexual', 'sexual orientation', 'gender identity', 'consensual sex', 'same-sex', 'same sex', 'homophobia', 'between consenting adults']
+22. **lgbt** = ['lgbt', 'lesbian', 'gay', 'homosexual', 'transsexual', 'sexual orientation', 'gender identity', 'consensual sex', 'same-sex', 'same sex', 'homophobia', 'between consenting adults']
 
-**ethnic** = ['tribal area', 'vulnerable population', 'roma', 'ethnic', 'minorit', 'xenophobi']
+23. **ethnic** = ['tribal area', 'vulnerable population', 'roma', 'ethnic', 'minorit', 'xenophobi']
 
-**indigenous** = ['indigenous', 'aboriginal']
+24. **indigenous** = ['indigenous', 'aboriginal']
 
-**race** = ['race', 'racial', 'racism']
+25. **race** = ['race', 'racial', 'racism']
 
-**disabilities** = ['disabilit', 'disabled']
+26. **disabilities** = ['disabilit', 'disabled']
 
-**women** = ['women', 'gender', 'misogyn', 'widows', 'girl']
+27. **women** = ['women', 'gender', 'misogyn', 'widows', 'girl']
 
-**sex-violence** = ['domestic violence', 'sexual violence', 'rape', 'domestic abuse', 'sexual abuse', prostitut', 'gender-based violence', 'violence against women', 'prostitut']
+28. **sex-violence** = ['domestic violence', 'sexual violence', 'rape', 'domestic abuse', 'sexual abuse', prostitut', 'gender-based violence', 'violence against women', 'prostitut']
 
-**discrimination** = ['discriminat', 'advancement', 'stereotyp', 'attitude', 'role responsibilit', 'equal']
+29. **discrimination** = ['discriminat', 'advancement', 'stereotyp', 'attitude', 'role responsibilit', 'equal']
 
-**harm-trad** = ['fgm', 'genital', 'early marriage', 'forced marriage', 'harmful traditional practices', 'sexual mutilation', 'polygamy','witch']
+30. **harm-trad** = ['fgm', 'genital', 'early marriage', 'forced marriage', 'harmful traditional practices', 'sexual mutilation', 'polygamy','witch']
 
-**reproductive** = ['reproductive', 'abortion', 'birth control', 'maternal', 'family planning']
+31. **reproductive** = ['reproductive', 'abortion', 'birth control', 'maternal', 'family planning']
 
-**elderly** = ['elderly']
+32. **elderly** = ['elderly']
 
 #### political conflict
 
-**conflict** = ['truth commission', 'reconstruction', 'post-conflict', 'reconciliation', 'civil war', 'post conflict', 'civil conflict', 'armed conflict']
+33. **conflict** = ['truth commission', 'reconstruction', 'post-conflict', 'reconciliation', 'civil war', 'post conflict', 'civil conflict', 'armed conflict']
 
-**governance** = ['good governance', 'rule law', 'stability', 'public governance']
+34. **governance** = ['good governance', 'rule law', 'stability', 'public governance']
 
-**corruption** = ['corruption', 'bribary', 'bribe', 'bribing', 'extortion']
+35. **corruption** = ['corruption', 'bribary', 'bribe', 'bribing', 'extortion']
 
-**environment** = ['environment', 'pollution', 'climate change']
+36. **environment** = ['environment', 'pollution', 'climate change']
 
-**democ** = ['democrat', 'election']
+37. **democ** = ['democrat', 'election']
 
-**self-determ** =['self-determination', 'self determination']
+38. **self-determ** =['self-determination', 'self determination']
 
-**socialism** = ['socialism','communism']
+40. **socialism** = ['socialism','communism']
 
-**civil-so** = ['civil society','rights defenders', 'charities', 'protest', 'activist', 'demonstrator', 'freedom assembly', 'freedom association', 'free association', 'free assembly', 'demonstrations','NGO']
+41. **civil-so** = ['civil society','rights defenders', 'charities', 'protest', 'activist', 'demonstrator', 'freedom assembly', 'freedom association', 'free association', 'free assembly', 'demonstrations','NGO']
 
-**terrorism** = ['terroris']
+42. **terrorism** = ['terroris']
 
-**crime-humanity** = ['war crime','crimes humanity','genocide','massacre']
+43. **crime-humanity** = ['war crime','crimes humanity','genocide','massacre']
 
 #### human rights violations
 
-**impunity** = ['impunity', 'immunity from prosecution']
+44. **impunity** = ['impunity', 'immunity from prosecution']
 
 
