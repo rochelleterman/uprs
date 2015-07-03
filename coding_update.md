@@ -1,4 +1,14 @@
-99.87 of the recs have been tagged with either an institution or a theme.
+### Summary:
+
+1. Three tags: Institutions, Actions, and Themes
+2. 99.87 of the recs have been tagged with either an institution or a theme.
+3. Institutions are easier to tag than themes
+
+### Concerns - Questions
+
+1. A lot of the recs are about generic human rights instruments - e.g. "128.26. Endeavour to ratify without delay all international human rights statutes that it has yet to sign (Nigeria)". Difficult to capture.
+2. A lot of recs are about generic human rights violations -- also difficult to code. i.e. "Take effective, predominantly legislative steps to protect the rights of persons deprived of their liberty"
+3. Some recs are positive (i.e. complimenting the country) and others are critical. We got some of this through the "continue" action but I think it would be good to code this manually and then try a machine learning algorithm to catch the rest.
 
 ### Institutions
 
@@ -38,24 +48,26 @@
 
 ### Action
 
-**ratify** = ['ratify']
-**accede** = ['accede']
-**sign** = ['sign']
-**implement** = ['implement']
-**establish** = ['establish']
-**continue** = ['continue']
-**take-measures** = ['take measures']
-**harmonize** = ['harmonize']
-**report** = ['to report','reporting','reports']
-**party** = ['party to']
-**withdraw** = ['withdraw']
+1. **ratify** = ['ratify']
+2. **accede** = ['accede']
+3. **sign** = ['sign']
+4. **implement** = ['implement']
+5. **establish** = ['establish']
+6. **continue** = ['continue']
+7. **take-measures** = ['take measures']
+8. **harmonize** = ['harmonize']
+9. **report** = ['to report','reporting','reports']
+10. **party** = ['party to']
+11. **withdraw** = ['withdraw']
 
 ### Theme
+
+**Note:** The weird spellings are purposful. 
 
 ####physical integrity rights
 
 **torture** = ['torture', 'inhuman degrading treatment', 'corporal punishment', 'stoning', 'amputation', 'caning', 'whipping']
- 
+
 **trafficking** = ['slavery', 'forced labor', 'forced labour', 'traffick', 'abduct', 'kidnap']
 
 **prison** = ['prison', 'police', 'interrogation', 'detainees', 'security force', 'security personnel', 'security official', 'detention', 'detained', 'law enforc', 'incarceration', 'solitary confinement']
@@ -140,7 +152,7 @@
 
 **socialism** = ['socialism','communism']
 
-**civil-so** = ['civil society','rights defenders', 'charities', 'protest', 'activist', 'demonstrator', 'freedom assembly', 'freedom association', 'free association', 'free assembly', 'demonstrations']
+**civil-so** = ['civil society','rights defenders', 'charities', 'protest', 'activist', 'demonstrator', 'freedom assembly', 'freedom association', 'free association', 'free assembly', 'demonstrations','NGO']
 
 **terrorism** = ['terroris']
 
@@ -149,3 +161,5 @@
 #### human rights violations
 
 **impunity** = ['impunity', 'immunity from prosecution']
+
+
