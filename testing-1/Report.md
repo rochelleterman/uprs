@@ -6,47 +6,79 @@ Note: This is after I fixed obvious mistakes.
 
 **Theme**
 
-Match: 76
-Partial: 19
-False: 5
-
+- Match: 76
+- Partial: 19
+- False: 5
 
 **Institutions**
 
-Match: 95
-Partial: 2
-False: 3
-
+- Match: 95
+- Partial: 2
+- False: 3
 
 **Action**
 
-Match: 84
-Partial: 6
-False: 10
-
+- Match: 84
+- Partial: 6
+- False: 10
 
 ## Change Logs / Questions
 
 ### Institutions:
 
-I added a few more. Matt, can you update the codebook to account for the following:
+In general these are doing pretty well. 
 
-Ouagadougou Agreement ['ouagadougou']
-Vienna Convention on Consular Relations ['vienna']
-European Convention on the Legal Status of Migrant Workers ['eu-migrant']
-International Convention against the Recruitment, Use, Financing and Training of Mercenaries ['ic-mercenaries']
-United Nations Declaration on the Rights of Indigenous Peoples ['un-indig']
-The one that's doing the worst here is "core," as in the core human rights instruments. Maybe we should take it out? In general, though, these are doing pretty well.
+**Changes**:
+
+Added the following:
+
+- Ouagadougou Agreement ['ouagadougou'] 
+- Vienna Convention on Consular Relations ['vienna']
+- European Convention on the Legal Status of Migrant Workers ['eu-migrant']
+- International Convention against the Recruitment, Use, Financing and Training of Mercenaries ['ic-mercenaries']
+- United Nations Declaration on the Rights of Indigenous Peoples ['un-indig']
+
+**Issues**:
+
+1. The one that's doing the worst here is "core," as in the core human rights instruments. Maybe we should take it out? 
 
 ### Action:
 
-We got poor agreement on "implement",  "establish", and "report".  I updated the program on the "take measures" code, which is now doing very well. 
+**Changes**:
+
+- I updated the program on the "take measures" code, which is now doing very well. 
+
+**Issues:**
+
+1. 
+We got poor agreement on "implement",  "establish", and "report". Should they be modified?
 
 ### Theme:
 
-I fixed a few things. The worst ones here were "foreign-movement", "governance", "post-conflict," and "discrimination". 
+The worst ones here were "foreign-movement", "governance", "post-conflict," and "discrimination". 
 
-Here are some questions that came up about themes:
+**Changes:**
+
+- Added 'poor' to Actors
+- Linked institutions to themes:
+	- ['women'] = ['CEDAW', 'eu-vaw', 'pol-women']
+	- ['sex-violence'] = ['eu-vaw', 'eu-child']
+	- ['children'] = ['CRC', 'eu-child']
+	- ['torture'] = ['CAT']
+	- ['disappearances'] = ['CPED']
+	- ['disabilities'] = ['CRPD']
+	- ['migrants'] = ['ICMW','eu-migrant']
+	- ['race'] = ['ICERD']
+	- ['labor'] = ['ILO']
+	- ['trafficking'] = ['traffick', 'eu-traff']
+	- ['indigenous'] = ['ind169','un-indig']
+	- ['domest-movement'] = ['kampala']
+	- ['ethnic'] = ['frame-minorities']
+	- ['education'] = ['unesco-ed']
+	- ['culture'] = ['unesco-expr']
+	- ['post-conflict'] = ['ICC']
+
+**Issues:**
 
 1. Recs about "birth registrations” ? Should they be classified as children?
 
@@ -54,13 +86,13 @@ Here are some questions that came up about themes:
 
 3.  Should all recs classified as sexual violence also be classified as women? For example, if a rec mentions FGM, should it also be classified as dealing with women?
 
-4. Recs mentioning the European Court of Human Rights and ICC were classified as Judiciary because of the "court" keywords. I somewhat fixed this by forcing ‘court’ and ‘tribunal’ keywords to be lowercase, thus eliminating these cases. 
+4. Recs mentioning the European Court of Human Rights and ICC were classified as Judiciary because of the "court" . I somewhat fixed this by forcing ‘court’ and ‘tribunal’  to be lowercase, thus eliminating these cases. 
 
 5.  Is ‘sexual harassment’ a case of sexual violence? (I wish we didn't have to decide these things...)
 
 6. Should 'drug trafficking' be counted as trafficking?
 
-7. Statelessness, refugee and citizenship issues is a missing area. Should we add another theme or put these keywords into an existing theme?
+7. Statelessness, refugee and citizenship issues is a missing area. Should we add another theme or put these  into an existing theme?
 
 8. For recs about MDGs -- should these be included in the poverty (i.e. the theme on development)?
 
