@@ -60,6 +60,7 @@ The worst ones here were "foreign-movement", "governance", "post-conflict," and 
 **Changes:**
 
 - Added 'poor' to Actors
+- Recs mentioning the European Court of Human Rights and ICC were classified as Judiciary because of the "court." I somewhat fixed this by forcing ‘court’ and ‘tribunal’ to be lowercase, thus eliminating these cases.
 - Linked institutions to themes:
 	- ['women'] = ['CEDAW', 'eu-vaw', 'pol-women']
 	- ['sex-violence'] = ['eu-vaw', 'eu-child']
@@ -86,15 +87,13 @@ The worst ones here were "foreign-movement", "governance", "post-conflict," and 
 
 3.  Should all recs classified as sexual violence also be classified as women? For example, if a rec mentions FGM, should it also be classified as dealing with women?
 
-4. Recs mentioning the European Court of Human Rights and ICC were classified as Judiciary because of the "court" . I somewhat fixed this by forcing ‘court’ and ‘tribunal’  to be lowercase, thus eliminating these cases. 
+4.  Is ‘sexual harassment’ a case of sexual violence? (I wish we didn't have to decide these things...)
 
-5.  Is ‘sexual harassment’ a case of sexual violence? (I wish we didn't have to decide these things...)
+5. Should 'drug trafficking' be counted as trafficking?
 
-6. Should 'drug trafficking' be counted as trafficking?
+6. Statelessness, refugee and citizenship issues is a missing area. Should we add another theme or put these  into an existing theme?
 
-7. Statelessness, refugee and citizenship issues is a missing area. Should we add another theme or put these  into an existing theme?
-
-8. For recs about MDGs -- should these be included in the poverty (i.e. the theme on development)?
+7. For recs about MDGs -- should these be included in the poverty (i.e. the theme on development)?
 
 ## Discrepencies
 
