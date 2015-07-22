@@ -26,18 +26,18 @@ False: 3
 
 ### Institutions:
 
-Erin added some but I think we should stop included more unless they're really significant
+Erin added some but I think we should stop included more unless they're really significant.
 
 **Changes**:
 
-1. HCR is now "Human Rights Council". (new)
-2. "Human Rights Committee" is now listed under ICCPR
-3. Added "UNHCR"
+1. Added "Human Rights Council" and made its key "HRC". "HRC" was previously the key for "Human Rights Committee", but I've moved this institution under ICCPR.
+3. Added "UNHCR" (and added it to "migrants" in theme)
 
 **Issues**:
 
 1. Make sure "hague" is listed in the codebook
 2. I added HCR but this should only refer to specific mentions of the UPR and HRC, not vague "recommendations"?
+3. "Core" is once again performing badly. If we keep it, we need to specify that it refers only to *major* or *core* institutions
 
 ### Action:
 
@@ -47,11 +47,12 @@ Erin added some but I think we should stop included more unless they're really s
 
 **Issues:**
 
-1. Double check that 'implement' is on codebook
+1. Double check that 'implement' is in codebook
+2. Double check that 'report' is in codebook
 
 ### Theme:
 
-The worst ones here were "foreign-movement", "governance", "post-conflict," and "discrimination". 
+The worst ones here were "judiciary", "impunity", "labor".
 
 **Changes:**
 
@@ -61,11 +62,9 @@ The worst ones here were "foreign-movement", "governance", "post-conflict," and 
 **Issues:**
 
 1. 'corporal punishment' always about children? Usually, but not always explicitely.
-
 2. 'social services' to 'poverty'? The problem is that this is SO vague and overly used, too inclusive.
-
 3. 'welfare' :same problem as above. Too inclusive. Should we add it anyway?
-
+4. Erin is not classifying ICMW as "labor" but it has the word "migrants" in it. We need to highlight this in the codebook.
 
 ## Discrepencies
 
