@@ -18,9 +18,9 @@ merge$notes <- NULL
 
 write.csv(merge,"testing-2/merge.csv")
 
-###
+### Analysis
 
-results <- read.csv("testing-2/irr-results.csv")
+results <- read.csv("testing-2/irr-results-after.csv")
 names(results)
 
 names <- sort(names(rochelle))
@@ -28,7 +28,7 @@ names <- names[-c(48)]
 names
 
 results$Variable <- names
-write.csv(results,"testing-2/irr-results.csv")
+write.csv(results,"testing-2/irr-results-after.csv")
 names(results)
 results <- arrange(results, Cohen.s.Kappa)
 head(results,10)

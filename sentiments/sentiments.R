@@ -1,44 +1,70 @@
-### Machine learning
+### Machine learning on sentiments
 
 library(plyr)
+library(RTextTools)
+library(irr)
+
 
 rm(list=ls())
 setwd("~/Dropbox/berkeley/Dissertation/Data and Analyais/Git Repos/uprs")
 
 #load
 all <- read.csv("all-data.csv")
+# from erin's thematic coding
 erin1 <- read.csv("testing-1/erin-data.csv")
 erin2 <- read.csv("testing-2/erin-data.csv")
-matt <- read.csv("sentiments/sample-matt-sentiment.csv")
+# from just sentiment
+erin3 <- read.csv("sentiments/erin-sentiment-1.csv")
+erin4 <- read.csv("sentiments/erin-sentiment-2.csv")
+# matt's: note that this data was re-coded by erin. I'm incuding just matt's here for variation in the training set. But Erin's reproduction is included in the directory "snetiment/inter-rater-test"
+matt <- read.csv("sentiments/matt-sentiment.csv")
+
+####################################
+######## Inter-Rater Reliability ###
+####################################
+
+erin.irr <- read.csv("sentiments/inter-rater-testing/erin.csv")
+matt.irr <- read.csv("sentiments/inter-rater-testing/matt.csv")
+erin.irr <- erin.irr[,c("id","sentiment")]
+matt.irr <- matt.irr[,c("id","sentiment")]
+merge <- cbind(erin.irr$sentiment,matt.irr$sentiment)
+
+# irr scores
+kappa2(merge)
+agree(merge)
+write.csv(merge, "sentiments/inter-rater-testing/merge.csv")
+
+#################################
+##### Machine Learning #########
+#################################
 
 #subset
-names(erin1)
 erin1 <- erin1[,c("id","sentiment","text")]
 erin2 <- erin2[,c("id","sentiment","text")]
+erin3 <- erin3[,c("id","sentiment","text")]
+erin4 <- erin4[,c("id","sentiment","text")]
 matt <- matt[,c('id','sentiment',"text")]
-coded <- rbind(matt,erin2,erin1)
+coded <- rbind(matt, erin2, erin1, erin3, erin4)
 
-# TODO: RANDOMLY SAMPLE DATA
-
-# merge
-merge <- merge(all,coded,by="id",all.x=T)
-names(merge)
-library(RTextTools)
+# split into random training and testing sets
+all <- 1:600
+training <- sample(1:600, 500)
+test <- all[! all %in% training]
 
 # CREATE THE DOCUMENT-TERM MATRIX
 doc_matrix <- create_matrix(coded$text, language="english", removeNumbers=TRUE,
                             stemWords=TRUE, removeSparseTerms=.998)
 
 # CREATE CONTAINER
-container <- create_container(doc_matrix, coded$sentiment, trainSize=1:200,
-                              testSize=200:300, virgin=FALSE)
+container <- create_container(doc_matrix, coded$sentiment, trainSize=training,
+                              testSize=test, virgin=FALSE)
 
 # RUN NINE DIFFERENT TRAINING MODELS
 
 #first models take little memory and are thus faster
 SVM <- train_model(container,"SVM")
 #GLMNET <- train_model(container,"GLMNET")
-MAXENT <- train_model(container,"MAXENT")
+#MAXENT <- train_model(container,"MAXENT")
 SLDA <- train_model(container,"SLDA")
 
 #the following models take more memory
@@ -54,7 +80,7 @@ TREE <- train_model(container,"TREE")
 
 SVM_CLASSIFY <- classify_model(container, SVM)
 #GLMNET_CLASSIFY <- classify_model(container, GLMNET)
-MAXENT_CLASSIFY <- classify_model(container, MAXENT)
+#MAXENT_CLASSIFY <- classify_model(container, MAXENT)
 SLDA_CLASSIFY <- classify_model(container, SLDA)
 
 # the remaining high-memory models we will skip
@@ -68,7 +94,7 @@ TREE_CLASSIFY <- classify_model(container, TREE)
 ### ANALYTICS
 
 analytics <- create_analytics(container,
-                              cbind(SVM_CLASSIFY, SLDA_CLASSIFY,MAXENT_CLASSIFY,
+                              cbind(SVM_CLASSIFY, SLDA_CLASSIFY,#MAXENT_CLASSIFY,
                                     BOOSTING_CLASSIFY,BAGGING_CLASSIFY,RF_CLASSIFY,
                                     NNET_CLASSIFY,TREE_CLASSIFY))
 
@@ -81,13 +107,13 @@ summary(analytics)
 # analytics@ensemble_summary: SUMMARY OF ENSEMBLE PRECISION/COVERAGE. USES THE n VARIABLE PASSED INTO create_analytics()
 
 create_ensembleSummary(analytics@document_summary)
-
+analytics@label_summary
 
 # N-FOLD CROSS-VALIDATION
 
 SVM <- cross_validate(container, 4, "SVM")
-GLMNET <- cross_validate(container, 4, "GLMNET")
-MAXENT <- cross_validate(container, 4, "MAXENT")
+#GLMNET <- cross_validate(container, 4, "GLMNET")
+#MAXENT <- cross_validate(container, 4, "MAXENT")
 SLDA <- cross_validate(container, 4, "SLDA")
 
 
