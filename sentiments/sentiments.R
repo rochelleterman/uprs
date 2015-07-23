@@ -3,6 +3,8 @@
 library(plyr)
 library(RTextTools)
 library(irr)
+library(qdap)
+library(stringr)
 
 
 rm(list=ls())
@@ -127,3 +129,38 @@ TREE <- cross_validate(container, 4, "TREE")
 
 write.csv(analytics@document_summary, "DocumentSummary.csv")
 head(USCongress)
+
+#################################
+##### Sentiment Analysis QDAP ###
+#################################
+
+
+all <- read.csv("all-data.csv")
+all <- all[,c("id","to","From","year","text")]
+all$text <- as.character(all$text)
+truncdf(all[1:10, ])
+
+# get rid of starting numbers
+rid.index <- function(text){
+  index <- beg2char(text, " ",include=TRUE)
+  return(gsub(index, " ", text))
+}  
+all$text <- lapply(all$text,rid.index)
+
+# get rid of countries at the end
+rid.countries <- function(text){
+  index <- char2end(text, "(",include=TRUE)
+  return(gsub(index, ".", text,fixed=T))
+}  
+all$text <- lapply(all$text,rid.countries)
+
+#strip whitespace
+all$text <- Trim(all$text)
+
+x <- sentSplit(all,text.var="text")
+subset <- x[1:100,]
+
+## sent.
+(poldat <- with(subset, polarity(text)))
+plot(poldat)
+pol <- poldat$all
