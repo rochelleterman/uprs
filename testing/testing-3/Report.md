@@ -39,7 +39,7 @@ Erin added some but I think we should stop included more unless they're really s
 
 **Changes**:
 
-1. Tweaked CRC to differentiate from ICRC -- no need to change codebook.
+No major.
 
 **Issues**:
 
@@ -49,7 +49,7 @@ Erin added some but I think we should stop included more unless they're really s
 
 **Changes**:
 
-1. Tweaked some key words
+No major.
 
 **Issues:**
 
@@ -61,7 +61,7 @@ The worst ones here were 'pol-imprisonment', 'civil-so', 'ethnic', 'police'
 
 **Changes:**
 
-1. Added some more keywords to 'impunity'
+No major.
 
 **Issues:**
 
