@@ -8,21 +8,27 @@ Note: This is after I fixed obvious mistakes.
 **Theme**
 
 Match: 80
+
 Partial: 16
+
 False: 4
 
 
 **Institutions**
 
 Match: 93
+
 Partial: 1
+
 False: 6
 
 
 **Action**
 
 Match: 98
+
 Partial: 1
+
 False: 1
 
 ## Change Logs / Questions
@@ -33,7 +39,7 @@ Erin added some but I think we should stop included more unless they're really s
 
 **Changes**:
 
-- Tweaked CRC to differentiate from ICRC -- no need to change codebook.
+1. Tweaked CRC to differentiate from ICRC -- no need to change codebook.
 
 **Issues**:
 
@@ -43,7 +49,7 @@ Erin added some but I think we should stop included more unless they're really s
 
 **Changes**:
 
-- Tweaked some key words
+1. Tweaked some key words
 
 **Issues:**
 
@@ -55,8 +61,8 @@ The worst ones here were 'pol-imprisonment', 'civil-so', 'ethnic', 'police'
 
 **Changes:**
 
-- Added section splitting women's rights in social, economic + political.  Need to add to codebook.
-- Linked 'UNHRC' to 'migrants'
+1. Added section splitting women's rights in social, economic + political.  Need to add to codebook.
+2. Linked 'UNHRC' to 'migrants'
 
 **Issues:**
 
