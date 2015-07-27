@@ -61,8 +61,7 @@ The worst ones here were 'pol-imprisonment', 'civil-so', 'ethnic', 'police'
 
 **Changes:**
 
-1. Added section splitting women's rights in social, economic + political.  Need to add to codebook.
-2. Linked 'UNHRC' to 'migrants'
+1. Added some more keywords to 'impunity'
 
 **Issues:**
 
