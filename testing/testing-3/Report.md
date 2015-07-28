@@ -66,8 +66,10 @@ No major.
 **Issues:**
 
 1. 'pol.imprisonment' was often confused with 'prisoners' and/or 'civil society'
-2. Erin asked if there was a 'human rights defenders' code. This should be included in 'civil-so'. Make sure the codebook specifies that 'civil society' includes 'human rights defenders'.
+2. Erin asked if there was a 'human rights defenders' theme, but this is already included in *civil-so* in the program. Make sure this is reflected in the codebook
+3. 'Corporal punishment' problem again: *torture* or *children* or both?
 4. 'Race' and 'ethnic' were often confused. 
+5. Should 'Maternal mortality' be under *reproductive*, *health*, or both?
 
 ## Discrepencies
 
