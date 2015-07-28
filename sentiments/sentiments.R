@@ -13,13 +13,25 @@ setwd("~/Dropbox/berkeley/Dissertation/Data and Analyais/Git Repos/uprs")
 #load
 all <- read.csv("all-data.csv")
 # from erin's thematic coding
-erin1 <- read.csv("testing-1/erin-data.csv")
-erin2 <- read.csv("testing-2/erin-data.csv")
+erin1 <- read.csv("testing/testing-1/erin-data.csv")
+erin2 <- read.csv("testing/testing-2/erin-data.csv")
+erin3 <- read.csv("testing/testing-3/erin-data.csv")
 # from just sentiment
-erin3 <- read.csv("sentiments/erin-sentiment-1.csv")
-erin4 <- read.csv("sentiments/erin-sentiment-2.csv")
+erin4 <- read.csv("sentiments/erin-sentiment-1.csv")
+erin5 <- read.csv("sentiments/erin-sentiment-2.csv")
 # matt's: note that this data was re-coded by erin. I'm incuding just matt's here for variation in the training set. But Erin's reproduction is included in the directory "snetiment/inter-rater-test"
 matt <- read.csv("sentiments/matt-sentiment.csv")
+
+#subset
+erin1 <- erin1[,c("id","sentiment","text")]
+erin2 <- erin2[,c("id","sentiment","text")]
+erin3 <- erin3[,c("id","sentiment","text")]
+erin4 <- erin4[,c("id","sentiment","text")]
+erin5 <- erin5[,c("id","sentiment","text")]
+matt <- matt[,c('id','sentiment',"text")]
+coded <- rbind(matt, erin2, erin1, erin3, erin4, erin5)
+
+write.csv(coded, "sentiments/coded.csv")
 
 ####################################
 ######## Inter-Rater Reliability ###
@@ -39,14 +51,6 @@ write.csv(merge, "sentiments/inter-rater-testing/merge.csv")
 #################################
 ##### Machine Learning #########
 #################################
-
-#subset
-erin1 <- erin1[,c("id","sentiment","text")]
-erin2 <- erin2[,c("id","sentiment","text")]
-erin3 <- erin3[,c("id","sentiment","text")]
-erin4 <- erin4[,c("id","sentiment","text")]
-matt <- matt[,c('id','sentiment',"text")]
-coded <- rbind(matt, erin2, erin1, erin3, erin4)
 
 # split into random training and testing sets
 all <- 1:600
