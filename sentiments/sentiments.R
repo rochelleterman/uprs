@@ -34,7 +34,14 @@ matt <- matt[,c('id','sentiment',"text")]
 # all coded
 coded <- rbind(matt, erin2, erin1, erin3, erin4, erin5, erin6)
 which(duplicated(coded$id))
-write.csv(coded, "Data/coded.csv")
+#write.csv(coded, "Data/coded.csv")
+
+# virgin data
+virgin <- read.csv("sentiment-tests.csv")
+virgin$sentiment <- NA
+virgin <- virgin[,c('id','sentiment','text')]
+names(virgin)
+
 
 # trying just a binary code:
 # pos.index <- which(coded$sentiment>2)
@@ -62,6 +69,7 @@ write.csv(merge, "sentiments/inter-rater-testing/merge.csv")
 ##############################################
 
 # split into random training and testing sets
+
 all <- 1:800
 training <- sample(1:800, 600)
 test <- all[! all %in% training]
@@ -121,11 +129,6 @@ write.csv(analytics@document_summary, "DocumentSummary-test.csv")
 ## APPLYING CLASSIFIER TO TESTING DATA ##
 #########################################
 
-# load data
-test <- read.csv("sentiment-tests.csv")
-test$sentiment <- NA
-test <- test[,c('id','sentiment','text')]
-names(test)
 # make matrix
 new_matrix <- create_matrix(test$text, language="english", removeNumbers=TRUE,
                             stemWords=TRUE, removeSparseTerms=.998, originalMatrix = doc_matrix)
@@ -144,12 +147,11 @@ TREE_CLASSIFY <- classify_model(container_test, TREE)
 
 ### ANALYTICS
 
-analytics <- create_analytics(container_test,cbind(SVM_CLASSIFY, SLDA_CLASSIFY,MAXENT_CLASSIFY,
+analytics <- create_analytics(container_test,cbind(SVM_CLASSIFY, SLDA_CLASSIFY,#MAXENT_CLASSIFY,
                                                    BOOSTING_CLASSIFY,BAGGING_CLASSIFY,RF_CLASSIFY,
                                                    TREE_CLASSIFY))
 summary(analytics)
 
-summary(container_test)
 
 # N-FOLD CROSS-VALIDATION
 
