@@ -6,21 +6,21 @@ library(irr)
 library(qdap)
 library(stringr)
 
-
 rm(list=ls())
-setwd("~/Dropbox/berkeley/Dissertation/Data and Analyais/Git Repos/uprs")
+setwd("~/Dropbox/berkeley/Dissertation/Data and Analyais/Git Repos/uprs/sentiments")
 
 #load
-all <- read.csv("all-data.csv")
+all <- read.csv("../Data/all-data-cown.csv")
 # from erin's thematic coding
-erin1 <- read.csv("testing/testing-1/erin-data.csv")
-erin2 <- read.csv("testing/testing-2/erin-data.csv")
-erin3 <- read.csv("testing/testing-3/erin-data.csv")
+erin1 <- read.csv("../testing/testing-1/erin-data.csv")
+erin2 <- read.csv("../testing/testing-2/erin-data.csv")
+erin3 <- read.csv("../testing/testing-3/erin-data.csv")
 # from just sentiment
-erin4 <- read.csv("sentiments/erin-sentiment-1.csv")
-erin5 <- read.csv("sentiments/erin-sentiment-2.csv")
+erin4 <- read.csv("Data/erin-sentiment-1.csv")
+erin5 <- read.csv("Data/erin-sentiment-2.csv")
+erin6 <- read.csv("Data/erin-positive.csv")
 # matt's: note that this data was re-coded by erin. I'm incuding just matt's here for variation in the training set. But Erin's reproduction is included in the directory "snetiment/inter-rater-test"
-matt <- read.csv("sentiments/matt-sentiment.csv")
+matt <- read.csv("Data/matt-sentiment.csv")
 
 #subset
 erin1 <- erin1[,c("id","sentiment","text")]
@@ -28,10 +28,19 @@ erin2 <- erin2[,c("id","sentiment","text")]
 erin3 <- erin3[,c("id","sentiment","text")]
 erin4 <- erin4[,c("id","sentiment","text")]
 erin5 <- erin5[,c("id","sentiment","text")]
+erin6 <- erin6[,c("id","sentiment","text")]
 matt <- matt[,c('id','sentiment',"text")]
-coded <- rbind(matt, erin2, erin1, erin3, erin4, erin5)
 
-write.csv(coded, "sentiments/coded.csv")
+# all coded
+coded <- rbind(matt, erin2, erin1, erin3, erin4, erin5, erin6)
+which(duplicated(coded$id))
+write.csv(coded, "Data/coded.csv")
+
+# trying just a binary code:
+# pos.index <- which(coded$sentiment>2)
+# neg.index <- which(coded$sentiment<3)
+# coded$sentiment[pos.index] <- 1
+# coded$sentiment[neg.index] <- 0
 
 ####################################
 ######## Inter-Rater Reliability ###
@@ -48,13 +57,13 @@ kappa2(merge)
 agree(merge)
 write.csv(merge, "sentiments/inter-rater-testing/merge.csv")
 
-#################################
-##### Machine Learning #########
-#################################
+##############################################
+##### Machine Learning - TRAIN MODEL #########
+##############################################
 
 # split into random training and testing sets
-all <- 1:600
-training <- sample(1:600, 500)
+all <- 1:800
+training <- sample(1:800, 600)
 test <- all[! all %in% training]
 
 # CREATE THE DOCUMENT-TERM MATRIX
@@ -63,50 +72,39 @@ doc_matrix <- create_matrix(coded$text, language="english", removeNumbers=TRUE,
 
 # CREATE CONTAINER
 container <- create_container(doc_matrix, coded$sentiment, trainSize=training,
-                              testSize=test, virgin=FALSE)
+                              testSize=test, virgin=F)
 
 # RUN NINE DIFFERENT TRAINING MODELS
 
 #first models take little memory and are thus faster
 SVM <- train_model(container,"SVM")
-#GLMNET <- train_model(container,"GLMNET")
-#MAXENT <- train_model(container,"MAXENT")
+MAXENT <- train_model(container,"MAXENT")
 SLDA <- train_model(container,"SLDA")
 
 #the following models take more memory
 BOOSTING <- train_model(container,"BOOSTING")
 BAGGING <- train_model(container,"BAGGING")
 RF <- train_model(container,"RF")
-NNET <- train_model(container,"NNET")
 TREE <- train_model(container,"TREE")
 
 # CLASSIFY DATA USING TRAINED MODELS
 
-# we'll only do this on the four low-memory models we used
-
 SVM_CLASSIFY <- classify_model(container, SVM)
-#GLMNET_CLASSIFY <- classify_model(container, GLMNET)
-#MAXENT_CLASSIFY <- classify_model(container, MAXENT)
+MAXENT_CLASSIFY <- classify_model(container, MAXENT)
 SLDA_CLASSIFY <- classify_model(container, SLDA)
-
-# the remaining high-memory models we will skip
-
 BOOSTING_CLASSIFY <- classify_model(container, BOOSTING)
 BAGGING_CLASSIFY <- classify_model(container, BAGGING)
 RF_CLASSIFY <- classify_model(container, RF)
-NNET_CLASSIFY <- classify_model(container, NNET)
 TREE_CLASSIFY <- classify_model(container, TREE)
 
 ### ANALYTICS
 
 analytics <- create_analytics(container,
-                              cbind(SVM_CLASSIFY, SLDA_CLASSIFY,#MAXENT_CLASSIFY,
+                              cbind(SVM_CLASSIFY, SLDA_CLASSIFY,MAXENT_CLASSIFY,
                                     BOOSTING_CLASSIFY,BAGGING_CLASSIFY,RF_CLASSIFY,
-                                    NNET_CLASSIFY,TREE_CLASSIFY))
-
+                                    TREE_CLASSIFY))
 summary(analytics)
 
-# RESULTS WILL BE REPORTED BACK IN THE analytics VARIABLE.
 # analytics@algorithm_summary: SUMMARY OF PRECISION, RECALL, F-SCORES, AND ACCURACY SORTED BY TOPIC CODE FOR EACH ALGORITHM
 # analytics@label_summary: SUMMARY OF LABEL (e.g. TOPIC) ACCURACY
 # analytics@document_summary: RAW SUMMARY OF ALL DATA AND SCORING
@@ -114,6 +112,44 @@ summary(analytics)
 
 create_ensembleSummary(analytics@document_summary)
 analytics@label_summary
+
+#Export output to CSV file. You can export any of the analytics variables
+
+write.csv(analytics@document_summary, "DocumentSummary-test.csv")
+
+#########################################
+## APPLYING CLASSIFIER TO TESTING DATA ##
+#########################################
+
+# load data
+test <- read.csv("sentiment-tests.csv")
+test$sentiment <- NA
+test <- test[,c('id','sentiment','text')]
+names(test)
+# make matrix
+new_matrix <- create_matrix(test$text, language="english", removeNumbers=TRUE,
+                            stemWords=TRUE, removeSparseTerms=.998, originalMatrix = doc_matrix)
+# CREATE CONTAINER
+container_test <- create_container(new_matrix, test$sentiment, testSize = 1:100, virgin=T)
+
+# CLASSIFY DATA USING TRAINED MODELS (above)
+
+SVM_CLASSIFY <- classify_model(container_test, SVM)
+MAXENT_CLASSIFY <- classify_model(container_test, MAXENT)
+SLDA_CLASSIFY <- classify_model(container_test, SLDA)
+BOOSTING_CLASSIFY <- classify_model(container_test, BOOSTING)
+BAGGING_CLASSIFY <- classify_model(container_test, BAGGING)
+RF_CLASSIFY <- classify_model(container_test, RF)
+TREE_CLASSIFY <- classify_model(container_test, TREE)
+
+### ANALYTICS
+
+analytics <- create_analytics(container_test,cbind(SVM_CLASSIFY, SLDA_CLASSIFY,MAXENT_CLASSIFY,
+                                                   BOOSTING_CLASSIFY,BAGGING_CLASSIFY,RF_CLASSIFY,
+                                                   TREE_CLASSIFY))
+summary(analytics)
+
+summary(container_test)
 
 # N-FOLD CROSS-VALIDATION
 
@@ -129,15 +165,10 @@ RF <- cross_validate(container, 4, "RF")
 NNET <- cross_validate(container, 4, "NNET")
 TREE <- cross_validate(container, 4, "TREE")
 
-#Export output to CSV file. You can export any of the analytics variables
-
-write.csv(analytics@document_summary, "DocumentSummary.csv")
-head(USCongress)
 
 #################################
 ##### Sentiment Analysis QDAP ###
 #################################
-
 
 all <- read.csv("all-data.csv")
 all <- all[,c("id","to","From","year","text")]
