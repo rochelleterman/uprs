@@ -1,5 +1,6 @@
-### Machine learning on sentiments
+### Getting sentiment values
 
+# Required packages
 library(plyr)
 library(RTextTools)
 library(irr)
@@ -9,8 +10,10 @@ library(stringr)
 rm(list=ls())
 setwd("~/Dropbox/berkeley/Dissertation/Data and Analyais/Git Repos/uprs/sentiments")
 
-#load
-all <- read.csv("../Data/all-data-cown.csv")
+###########################
+##### Load Coded Data #####
+###########################
+
 # from erin's thematic coding
 erin1 <- read.csv("../testing/testing-1/erin-data.csv")
 erin2 <- read.csv("../testing/testing-2/erin-data.csv")
@@ -36,25 +39,12 @@ coded <- rbind(matt, erin2, erin1, erin3, erin4, erin5, erin6)
 which(duplicated(coded$id))
 #write.csv(coded, "Data/coded.csv")
 
-# virgin data
-virgin <- read.csv("sentiment-tests.csv")
-virgin$sentiment <- NA
-virgin <- virgin[,c('id','sentiment','text')]
-names(virgin)
-
-
-# trying just a binary code:
-# pos.index <- which(coded$sentiment>2)
-# neg.index <- which(coded$sentiment<3)
-# coded$sentiment[pos.index] <- 1
-# coded$sentiment[neg.index] <- 0
-
 ####################################
 ######## Inter-Rater Reliability ###
 ####################################
 
-erin.irr <- read.csv("sentiments/inter-rater-testing/erin.csv")
-matt.irr <- read.csv("sentiments/inter-rater-testing/matt.csv")
+erin.irr <- read.csv("inter-rater-testing/erin.csv")
+matt.irr <- read.csv("inter-rater-testing/matt.csv")
 erin.irr <- erin.irr[,c("id","sentiment")]
 matt.irr <- matt.irr[,c("id","sentiment")]
 merge <- cbind(erin.irr$sentiment,matt.irr$sentiment)
@@ -65,13 +55,12 @@ agree(merge)
 write.csv(merge, "sentiments/inter-rater-testing/merge.csv")
 
 ##############################################
-##### Machine Learning - TRAIN MODEL #########
+##### Machine Learning - Test models #########
 ##############################################
 
-# split into random training and testing sets
-
+# PREPARE TRAINING AND TEST SETS
 all <- 1:800
-training <- sample(1:800, 600)
+training <- sample(1:800, 700)
 test <- all[! all %in% training]
 
 # CREATE THE DOCUMENT-TERM MATRIX
@@ -83,13 +72,10 @@ container <- create_container(doc_matrix, coded$sentiment, trainSize=training,
                               testSize=test, virgin=F)
 
 # RUN NINE DIFFERENT TRAINING MODELS
+# TODO: Add: "MAXENT", "GLMNET", "NNET"
 
-#first models take little memory and are thus faster
 SVM <- train_model(container,"SVM")
-MAXENT <- train_model(container,"MAXENT")
 SLDA <- train_model(container,"SLDA")
-
-#the following models take more memory
 BOOSTING <- train_model(container,"BOOSTING")
 BAGGING <- train_model(container,"BAGGING")
 RF <- train_model(container,"RF")
@@ -98,7 +84,6 @@ TREE <- train_model(container,"TREE")
 # CLASSIFY DATA USING TRAINED MODELS
 
 SVM_CLASSIFY <- classify_model(container, SVM)
-MAXENT_CLASSIFY <- classify_model(container, MAXENT)
 SLDA_CLASSIFY <- classify_model(container, SLDA)
 BOOSTING_CLASSIFY <- classify_model(container, BOOSTING)
 BAGGING_CLASSIFY <- classify_model(container, BAGGING)
@@ -108,7 +93,7 @@ TREE_CLASSIFY <- classify_model(container, TREE)
 ### ANALYTICS
 
 analytics <- create_analytics(container,
-                              cbind(SVM_CLASSIFY, SLDA_CLASSIFY,MAXENT_CLASSIFY,
+                              cbind(SVM_CLASSIFY, SLDA_CLASSIFY,#MAXENT_CLASSIFY,
                                     BOOSTING_CLASSIFY,BAGGING_CLASSIFY,RF_CLASSIFY,
                                     TREE_CLASSIFY))
 summary(analytics)
@@ -123,34 +108,87 @@ analytics@label_summary
 
 #Export output to CSV file. You can export any of the analytics variables
 
-write.csv(analytics@document_summary, "DocumentSummary-test.csv")
+write.csv(analytics@document_summary, "Results/DocumentSummary-test.csv")
 
-#########################################
-## APPLYING CLASSIFIER TO TESTING DATA ##
-#########################################
+########################################
+## APPLYING CLASSIFIER TO VIRGIN DATA ##
+########################################
+
+# PREPARE DATA
+
+# load data
+all.data <- read.csv("../Data/all-data-cown.csv")
+
+# merge to get sentiments
+coded <- coded[,c("id","sentiment")]
+all.data <- merge(all.data, coded, by = "id", all.x = T)
+
+# training and testing sets
+train <- which(!is.na(all.data$sentiment))
+test <- which(is.na(all.data$sentiment))
 
 # make matrix
-new_matrix <- create_matrix(test$text, language="english", removeNumbers=TRUE,
-                            stemWords=TRUE, removeSparseTerms=.998, originalMatrix = doc_matrix)
-# CREATE CONTAINER
-container_test <- create_container(new_matrix, test$sentiment, testSize = 1:100, virgin=T)
+new_matrix <- create_matrix(all.data$text, language="english", removeNumbers=TRUE,
+                            stemWords=TRUE, removeSparseTerms=.99)
+
+# create container
+container <- create_container(new_matrix, all.data$sentiment, trainSize = train, testSize = test, virgin=T)
+
+# TRAIN MODELS
+
+#first models take little memory and are thus faster
+SVM <- train_model(container,"SVM")
+#MAXENT <- train_model(container,"MAXENT")
+SLDA <- train_model(container,"SLDA")
+
+#the following models take more memory
+BOOSTING <- train_model(container,"BOOSTING")
+BAGGING <- train_model(container,"BAGGING")
+RF <- train_model(container,"RF")
+TREE <- train_model(container,"TREE")
 
 # CLASSIFY DATA USING TRAINED MODELS (above)
 
-SVM_CLASSIFY <- classify_model(container_test, SVM)
-MAXENT_CLASSIFY <- classify_model(container_test, MAXENT)
-SLDA_CLASSIFY <- classify_model(container_test, SLDA)
-BOOSTING_CLASSIFY <- classify_model(container_test, BOOSTING)
-BAGGING_CLASSIFY <- classify_model(container_test, BAGGING)
-RF_CLASSIFY <- classify_model(container_test, RF)
-TREE_CLASSIFY <- classify_model(container_test, TREE)
+SVM_CLASSIFY <- classify_model(container, SVM)
+MAXENT_CLASSIFY <- classify_model(container, MAXENT)
+SLDA_CLASSIFY <- classify_model(container, SLDA)
+BOOSTING_CLASSIFY <- classify_model(container, BOOSTING)
+BAGGING_CLASSIFY <- classify_model(container, BAGGING)
+RF_CLASSIFY <- classify_model(container, RF)
+TREE_CLASSIFY <- classify_model(container, TREE)
+
 
 ### ANALYTICS
 
-analytics <- create_analytics(container_test,cbind(SVM_CLASSIFY, SLDA_CLASSIFY,#MAXENT_CLASSIFY,
+analytics <- create_analytics(container,cbind(SVM_CLASSIFY, SLDA_CLASSIFY,#MAXENT_CLASSIFY,
                                                    BOOSTING_CLASSIFY,BAGGING_CLASSIFY,RF_CLASSIFY,
                                                    TREE_CLASSIFY))
 summary(analytics)
+
+
+create_ensembleSummary(analytics@document_summary)
+analytics@label_summary
+
+doc_summary <- analytics@document_summary
+
+#Export output to CSV file. You can export any of the analytics variables
+
+write.csv(analytics@document_summary, "Results/DocumentSummary.csv")
+
+# APPLY RESULTS TO DATA FRAME
+
+# create boolean variable for whether sentiment is hand-coded (1) or machine-coded (0)
+all.data$sent.label <- 0
+all.data$sent.label[train] <- 1
+
+all.data$sentiment[test] <- doc_summary$CONSENSUS_CODE
+all.data$consensus.agree <- NA
+all.data$consensus.agree[test] <- doc_summary$CONSENSUS_AGREE
+
+all.data$sentiment <- as.numeric(all.data$sentiment)
+
+# save data
+write.csv(all.data,"../Data/all-data-with-sentiment.csv",row.names=F)
 
 
 # N-FOLD CROSS-VALIDATION
@@ -159,8 +197,6 @@ SVM <- cross_validate(container, 4, "SVM")
 #GLMNET <- cross_validate(container, 4, "GLMNET")
 #MAXENT <- cross_validate(container, 4, "MAXENT")
 SLDA <- cross_validate(container, 4, "SLDA")
-
-
 BAGGING <- cross_validate(container, 4, "BAGGING")
 BOOSTING <- cross_validate(container, 4, "BOOSTING")
 RF <- cross_validate(container, 4, "RF")
