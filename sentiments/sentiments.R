@@ -21,7 +21,9 @@ erin3 <- read.csv("../testing/testing-3/erin-data.csv")
 # from just sentiment
 erin4 <- read.csv("Data/erin-sentiment-1.csv")
 erin5 <- read.csv("Data/erin-sentiment-2.csv")
+# oversampled pos and negative
 erin6 <- read.csv("Data/erin-positive.csv")
+erin7 <- read.csv("Data/erin-negative.csv")
 # matt's: note that this data was re-coded by erin. I'm incuding just matt's here for variation in the training set. But Erin's reproduction is included in the directory "snetiment/inter-rater-test"
 matt <- read.csv("Data/matt-sentiment.csv")
 
@@ -32,10 +34,11 @@ erin3 <- erin3[,c("id","sentiment","text")]
 erin4 <- erin4[,c("id","sentiment","text")]
 erin5 <- erin5[,c("id","sentiment","text")]
 erin6 <- erin6[,c("id","sentiment","text")]
+erin7 <- erin7[,c("id","sentiment","text")]
 matt <- matt[,c('id','sentiment',"text")]
 
 # all coded
-coded <- rbind(matt, erin2, erin1, erin3, erin4, erin5, erin6)
+coded <- rbind(matt, erin2, erin1, erin3, erin4, erin5, erin6, erin7)
 which(duplicated(coded$id))
 #write.csv(coded, "Data/coded.csv")
 
@@ -59,8 +62,8 @@ write.csv(merge, "sentiments/inter-rater-testing/merge.csv")
 ##############################################
 
 # PREPARE TRAINING AND TEST SETS
-all <- 1:800
-training <- sample(1:800, 700)
+all <- 1:900
+training <- sample(1:900, 800)
 test <- all[! all %in% training]
 
 # CREATE THE DOCUMENT-TERM MATRIX
@@ -136,12 +139,8 @@ container <- create_container(new_matrix, all.data$sentiment, trainSize = train,
 
 # TRAIN MODELS
 
-#first models take little memory and are thus faster
 SVM <- train_model(container,"SVM")
-#MAXENT <- train_model(container,"MAXENT")
 SLDA <- train_model(container,"SLDA")
-
-#the following models take more memory
 BOOSTING <- train_model(container,"BOOSTING")
 BAGGING <- train_model(container,"BAGGING")
 RF <- train_model(container,"RF")
@@ -150,7 +149,6 @@ TREE <- train_model(container,"TREE")
 # CLASSIFY DATA USING TRAINED MODELS (above)
 
 SVM_CLASSIFY <- classify_model(container, SVM)
-MAXENT_CLASSIFY <- classify_model(container, MAXENT)
 SLDA_CLASSIFY <- classify_model(container, SLDA)
 BOOSTING_CLASSIFY <- classify_model(container, BOOSTING)
 BAGGING_CLASSIFY <- classify_model(container, BAGGING)
