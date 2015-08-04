@@ -58,17 +58,20 @@ cluster.bootstrap <- pvclust(correlations, nboot=1000, method.dist="abscor")
 plot(cluster.bootstrap)
 pvrect(cluster.bootstrap)
 
-####################
+#################
 #### K-Means ####
-####################
+#################
 
-data = recs.t
+# this doesn't work all that well.
+
+data = reports
 
 set.seed(1234)
 n = 20
 clust <- kmeans(data,n, nstart= 25)
 centers <- as.data.frame(clust$centers) #make dataframe of cluster centers
 
+# only when clusterings on texts or reports
 top5themes <- function(k){
   theta.k <- centers[k,] # define theta-k, i.e.  row k of cluster centers dataframe
   theta.notk <- colSums(centers[-(k),])/5 # define theta-not-k, i.e. rows not-k of cluster centers divided by 5 (number of clusters - 1)
@@ -81,13 +84,14 @@ for (i in 1:n){
 }
 keywords
 
+# see which theme is in which cluster
 clusters <- as.data.frame(clust$cluster)
 clusters$theme <- rownames(clusters)
 colnames(clusters) <- c("cluster","theme")
 clusters$cluster <- as.factor(clusters$cluster)
 clusters <- arrange(clusters,cluster)
 
-# hclust
+# hclust on reports
 distance.matrix <- dist(reports, method = "euclidean", diag = FALSE, upper = FALSE, p = 2)
 x<- hclust(distance.matrix, method = "complete", members = NULL)
 plot(x)
