@@ -11,6 +11,8 @@ library(pvclust)
 library(countrycode)
 library(matrixStats)
 library(lsa)
+library('dendextend')
+library('dendextendRcpp')
 
 ######################
 #### Prepare Data ####
@@ -49,6 +51,14 @@ sender <- sender[rowSums(sender) > 100,] # keep only those who give at least 100
 # transpose recs to clustering themes by text
 #recs.t <- data.frame(t(recs))
 
+###################################
+#### Themes - Descriptive Stats ###
+###################################
+
+# number of recs per theme
+n.themes <- as.data.frame(colSums(themes))
+write.csv(n.themes, "Results/recs-per-theme.csv")
+
 #############################
 #### Clustering - theme ###
 #############################
@@ -56,17 +66,31 @@ sender <- sender[rowSums(sender) > 100,] # keep only those who give at least 100
 # http://research.stowers-institute.org/mcm/efg/R/Visualization/cor-cluster/index.htm
 
 # correlations
-data <- themes
+data <- themes[,which(colSums(themes)>50)]
+data$culture <- NULL
 
 correlations <- as.data.frame(cor(data))
 corrgram(correlations)
 
 dissimilarity <- 1 - cor(data)
+dissimilarity
+
 distance <- as.dist(dissimilarity)
 round(distance, 4) 
 
-plot(hclust(distance), 
-  main="Dissimilarity = 1 - Correlation", xlab="")
+# Create a dend:
+dend <- distance %>% hclust %>% as.dendrogram
+
+# and plot it:
+par(mar=c(8,5,2,2))
+
+dend %>% 
+  set("labels_col", value = c("maroon2","red","orange","orange","olivedrab3","olivedrab3","steelblue2","royalblue4","purple","purple"), k=10) %>% 
+  set("branches_k_color", value = c("maroon2","red","orange","orange","olivedrab3","olivedrab3","steelblue2","royalblue4","purple","purple"), k=10) %>% 
+  #set("labels_cex", .7) %>% 
+  plot
+dend %>% rect.dendrogram(k=2, border = 8, lty = 5, lwd = 2)
+
 
 ##############################
 #### Clustering - Sender ###
