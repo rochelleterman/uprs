@@ -1,5 +1,5 @@
 rm(list=ls())
-setwd("~/Dropbox/berkeley/Dissertation/Data and Analyais/Git Repos/uprs/Analysis/clustering-and-text")
+setwd("~/Dropbox/berkeley/Dissertation/Data and Analyais/Git Repos/uprs/Analysis")
 
 library(plyr)
 library(RTextTools)
@@ -19,22 +19,23 @@ library('dendextendRcpp')
 ######################
 
 documents <- read.csv('~/Dropbox/berkeley/Dissertation/Data and Analyais/Git Repos/uprs/Data/all-cown-binary.csv', stringsAsFactors = F)
-names(documents)
+names <- cbind(names(documents))
+write.csv(names, "variables.csv")
 
-# make codes for country labels
+# make 3letter codes for country labels
 documents$to_COW <- countrycode(documents$to_COW, "cown", "cowc")
 documents$from_COW <- countrycode(documents$from_COW, "cown", "cowc")
 
 # subset
 recs <- documents[,c(3,5,6,79:131)] # just keep to, from, year, themes
 
-# report as UOA
+# report as unit of observation
 temp = recs[,c(1,3:56)]
 reports <- ddply(.data=temp, .variables=.(to_COW,year), numcolwise(sum,na.rm = TRUE))
 row.names(reports) <- paste(reports$to_COW,reports$year,sep="-")
 reports <- reports[,-c(1,2)]
 
-# themes as UOA
+# themes as unit of observation
 names(recs)
 themes <- recs[,c(4:56)]
 themes.t <- data.frame(t(themes))
@@ -46,18 +47,33 @@ sender$from_COW[is.na(sender$from_COW)] <- "PLST"
 row.names(sender) <- sender$from_COW
 sender$from_COW <- NULL
 
-sender <- sender[rowSums(sender) > 100,] # keep only those who give at least 100 recs
+# institutions
+inst <- documents[,c(12:64)] # just keep to, from, year, institutions
 
-# transpose recs to clustering themes by text
-#recs.t <- data.frame(t(recs))
+###########################
+#### Descriptive Stats ###
+##########################
 
-###################################
-#### Themes - Descriptive Stats ###
-###################################
+# number of recs per institution
+n.institutions <- as.data.frame(colSums(inst))
+write.csv(n.institutions, "Results/recs-per-institution.csv")
 
 # number of recs per theme
 n.themes <- as.data.frame(colSums(themes))
 write.csv(n.themes, "Results/recs-per-theme.csv")
+
+# number of recs per sender
+n.sender <- cbind(rownames(sender),rowSums(sender))
+write.csv(n.sender,"Results/recs-per-sender.csv")
+
+# keep only those who give at least 100 recs
+sender.100 <- sender[rowSums(sender) > 100,] 
+n.sender.100<- cbind(rownames(sender.100),rowSums(sender.100))
+write.csv(n.sender.100,"Results/recs-per-sender-100.csv")
+
+# number of recs with only >100 senders
+recs.100 <- recs[recs$to_COW %in% rownames(sender.100),]
+nrow(recs.100) / nrow(recs)
 
 #############################
 #### Clustering - theme ###
@@ -97,20 +113,18 @@ dend %>% rect.dendrogram(k=2, border = 8, lty = 5, lwd = 2)
 
 data <- reports[,which(colSums(reports)>50)]
 
-# correlations
+### CORRELATIONS
+
 data$culture <- NULL
 
 correlations <- as.data.frame(cor(data))
-corrgram(correlations)
-
 dissimilarity <- 1 - cor(data)
 dissimilarity
-
-distance <- as.dist(dissimilarity)
-round(distance, 4) 
+d <- as.dist(dissimilarity)
+round(d, 4) 
 
 # Create a dend:
-dend <- distance %>% hclust %>% as.dendrogram
+dend <- d %>% hclust %>% as.dendrogram
 
 # and plot it:
 par(mar=c(8,5,2,2))
@@ -122,6 +136,22 @@ dend %>%
   plot
 dend %>% rect.dendrogram(k=2, border = 8, lty = 5, lwd = 2)
 
+## COSINE
+
+d <- cosine(as.matrix(data))
+d <- as.dist(1-d) 
+d
+
+# Create a dend:
+dend <- d %>% hclust %>% as.dendrogram
+
+# and plot it:
+dend %>% 
+  set("labels_col", k=10) %>% 
+  set("branches_k_color", k=10) %>% 
+  #set("labels_cex", .7) %>% 
+  plot
+dend %>% rect.dendrogram(k=2, border = 8, lty = 5, lwd = 2)
 
 ##############################
 #### Clustering - Sender ###
