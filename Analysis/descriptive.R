@@ -1,11 +1,6 @@
 rm(list=ls())
 setwd("~/Dropbox/berkeley/Dissertation/Data and Analyais/Git Repos/uprs/Analysis")
 
-library(plyr)
-library(RTextTools)
-library(qdap)
-library(stringr)
-library(mallet)
 library(corrgram)
 library(pvclust)
 library(countrycode)
@@ -14,6 +9,7 @@ library(lsa)
 library('dendextend')
 library('dendextendRcpp')
 library(ggplot2)
+library(readstata13)
 
 ######################
 #### Prepare Data ####
@@ -58,8 +54,8 @@ inst <- documents[,c(12:64)] # just keep to, from, year, institutions
 # number of recs per institution
 n.institutions <- as.data.frame(colSums(inst))
 names(n.institutions) <- "Counts"
-n.institutions$Proportions <- n.institutions$Count/sum(n.institutions$Count)
-write.csv(n.institutions, "Results/recs-per-institution.csv")
+n.institutions$Proportions <- n.institutions$Count/nrow(recs)
+write.csv(n.institutions, "Results/Descriptive/recs-per-institution.csv")
 
 topInst <- head(n.institutions[order(n.institutions$Counts, decreasing = T),],10)
 topInst$institution <- ordered(row.names(topInst), levels = row.names(topInst))
@@ -73,17 +69,17 @@ topInst  %>%
 # number of recs per theme
 n.themes <- as.data.frame(colSums(themes))
 names(n.themes) <- "Counts"
-n.themes$Proportions <- n.themes$Count/sum(n.themes$Count)
-write.csv(n.themes, "Results/recs-per-theme.csv")
+n.themes$Proportions <- n.themes$Count/nrow(recs)
+write.csv(n.themes, "Results/Descriptive/recs-per-theme.csv")
 
 topTheme <- head(n.themes[order(n.themes$Counts, decreasing = T),],10)
 topTheme$Theme <- ordered(row.names(topTheme), levels = row.names(topTheme))
 
 topTheme  %>%
-  ggplot (aes(theme, Counts)) +
+  ggplot (aes(Theme, Counts)) +
   geom_bar (stat ="identity") +
   theme(axis.text.x=element_text(angle=45,hjust=1)) +
-  ggtitle("10 Most Common Institutions")
+  ggtitle("10 Most Common Themes")
 
 # number of recs per sender
 n.sender <- cbind(rownames(sender),rowSums(sender))
@@ -104,12 +100,11 @@ nrow(recs.100) / nrow(recs)
 
 # http://research.stowers-institute.org/mcm/efg/R/Visualization/cor-cluster/index.htm
 data <- themes[,which(colSums(themes)>50)]
-
-# correlations
 data$culture <- NULL
 
+# correlations
 correlations <- as.data.frame(cor(data))
-corrgram(correlations)
+#corrgram(correlations)
 
 dissimilarity <- 1 - cor(data)
 dissimilarity
@@ -117,7 +112,7 @@ dissimilarity
 distance <- as.dist(dissimilarity)
 round(distance, 4) 
 
-# Create a dend:
+# Create a dend
 dend <- distance %>% hclust %>% as.dendrogram
 
 # and plot it:
@@ -129,6 +124,54 @@ dend %>%
   #set("labels_cex", .7) %>% 
   plot
 dend %>% rect.dendrogram(k=2, border = 8, lty = 5, lwd = 2)
+
+# assigning groups
+dend %>% labels
+civil <- labels(dend)[1:3]
+security <- labels(dend)[4:9]
+political <- labels(dend)[10:16]
+childmigrants <- labels(dend)[17:21]
+women <- labels(dend)[22:28]
+discrimination <- labels(dend)[29:33]
+socio.econ <- labels(dend)[34:46]
+
+# write function to get number of recs per cluster
+get.cluster.n <- function(cluster){
+  # subset recs with only columsn in cluster
+  y <- recs[,colnames(recs) %in% cluster]
+  
+  # subset recs with at least 1 theme in cluster
+  y.yes <- y[rowSums(y) > 0,]
+  
+  return(nrow(y.yes))
+}
+get.cluster.n(women)
+
+# make data frame of cluster - n values
+cluster <- c('civil','security','political','childmigrants','women','discrimination','socio.econ')
+counts <- c(get.cluster.n(civil),
+            get.cluster.n(security),
+            get.cluster.n(political),
+            get.cluster.n(childmigrants),
+            get.cluster.n(women),
+            get.cluster.n(discrimination),
+            get.cluster.n(socio.econ)
+            )
+n.cluster <- data.frame(cluster,counts)
+n.cluster$proportions <- n.cluster$count/nrow(recs)
+n.cluster$cluster <- ordered(n.cluster$cluster, levels = n.cluster$cluster)
+n.cluster
+
+# save it
+write.csv(n.cluster,"Results/Clustering/recs-per-cluster.csv")
+
+# plot it
+
+n.cluster  %>%
+  ggplot (aes(cluster, proportions)) +
+  geom_bar (stat ="identity") +
+  theme(axis.text.x=element_text(angle=45,hjust=1)) +
+  ggtitle("Proportion of Recommendations Per Cluster")
 
 #############################################
 #### Clustering - Themes based on Reports ###
@@ -148,6 +191,7 @@ round(d, 4)
 
 # Create a dend:
 dend <- d %>% hclust %>% as.dendrogram
+dend <- as.dendrogram(hclust(d, method="single"))
 
 # and plot it:
 par(mar=c(8,5,2,2))
@@ -194,19 +238,31 @@ plot(hclust(distance),
      main="Dissimilarity = 1 - Correlation", xlab="")
 
 # euclidean distance
-data <- sender
+data <- sender.100
 d <- dist(data,method="euclidean")
-plot(hclust(d), main="Dissimilarity = Euclid", xlab="")
+d
+
 
 # cosign
-data = as.data.frame(t(sender))
+data = as.data.frame(t(sender.100))
 
 d <- cosine(as.matrix(data))
 d <- as.dist(1-d) 
-plot(hclust(d), main = "Dissimilarity = 1 - Cosine")
+d
+#plot(hclust(d), main = "Dissimilarity = 1 - Cosine")
 
-#cluster.bootstrap <- pvclust(correlations, nboot=1000, method.dist="abscor")
-#plot(cluster.bootstrap)
-#pvrect(cluster.bootstrap)
+# Create a dend:
+dend <- d %>% hclust %>% as.dendrogram
 
+# and plot it:
+dend %>% 
+  set("labels_col") %>% 
+  set("branches_k_color", k=10) %>% 
+  set("labels_cex", .5) %>% 
+  hang.dendrogram %>% # hang the leaves
+  plot
+dend %>% rect.dendrogram(k=6, border = 8, lty = 5, lwd = 2)
 
+#######
+dat <- read.dta13("~/Dropbox/UPRproject/AnalysisErik/Dyadicdata.dta")
+dat.rec <- dat[dat$recommendation>0,]
