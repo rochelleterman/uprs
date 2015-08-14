@@ -13,6 +13,7 @@ library(matrixStats)
 library(lsa)
 library('dendextend')
 library('dendextendRcpp')
+library(ggplot2)
 
 ######################
 #### Prepare Data ####
@@ -56,11 +57,33 @@ inst <- documents[,c(12:64)] # just keep to, from, year, institutions
 
 # number of recs per institution
 n.institutions <- as.data.frame(colSums(inst))
+names(n.institutions) <- "Counts"
+n.institutions$Proportions <- n.institutions$Count/sum(n.institutions$Count)
 write.csv(n.institutions, "Results/recs-per-institution.csv")
+
+topInst <- head(n.institutions[order(n.institutions$Counts, decreasing = T),],10)
+topInst$institution <- ordered(row.names(topInst), levels = row.names(topInst))
+
+topInst  %>%
+  ggplot (aes(institution, Counts)) +
+  geom_bar (stat ="identity") +
+  theme(axis.text.x=element_text(angle=45,hjust=1)) +
+  ggtitle("10 Most Common Institutions")
 
 # number of recs per theme
 n.themes <- as.data.frame(colSums(themes))
+names(n.themes) <- "Counts"
+n.themes$Proportions <- n.themes$Count/sum(n.themes$Count)
 write.csv(n.themes, "Results/recs-per-theme.csv")
+
+topTheme <- head(n.themes[order(n.themes$Counts, decreasing = T),],10)
+topTheme$Theme <- ordered(row.names(topTheme), levels = row.names(topTheme))
+
+topTheme  %>%
+  ggplot (aes(theme, Counts)) +
+  geom_bar (stat ="identity") +
+  theme(axis.text.x=element_text(angle=45,hjust=1)) +
+  ggtitle("10 Most Common Institutions")
 
 # number of recs per sender
 n.sender <- cbind(rownames(sender),rowSums(sender))
@@ -72,7 +95,7 @@ n.sender.100<- cbind(rownames(sender.100),rowSums(sender.100))
 write.csv(n.sender.100,"Results/recs-per-sender-100.csv")
 
 # number of recs with only >100 senders
-recs.100 <- recs[recs$to_COW %in% rownames(sender.100),]
+recs.100 <- recs[recs$from_COW %in% rownames(sender.100),]
 nrow(recs.100) / nrow(recs)
 
 #############################
