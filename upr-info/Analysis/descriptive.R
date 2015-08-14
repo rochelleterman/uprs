@@ -18,10 +18,15 @@ library(plyr)
 
 documents <- read.csv('~/Dropbox/berkeley/Dissertation/Data and Analyais/Git Repos/uprs/upr-info/Data/all-upr-info-binary.csv', stringsAsFactors = F)
 
+# take out voluntary pledges
+documents <- documents[!documents$Response=="Voluntary Pledge",]
+
+# should be 41066
+nrow(documents)
+
 # write variables
 # names <- cbind(names(documents))
 # write.csv(names, "variables.csv")
-
 names(documents)
 
 # make 3letter codes for country labels
@@ -65,19 +70,19 @@ sender$From_COW <- NULL
 ##########################
 
 # number of recs per institution
-n.institutions <- as.data.frame(colSums(inst))
-names(n.institutions) <- "Counts"
-n.institutions$Proportions <- n.institutions$Count/nrow(recs)
-write.csv(n.institutions, "Results/Descriptive/recs-per-institution.csv")
+# n.institutions <- as.data.frame(colSums(inst))
+# names(n.institutions) <- "Counts"
+# n.institutions$Proportions <- n.institutions$Count/nrow(recs)
+# write.csv(n.institutions, "Results/Descriptive/recs-per-institution.csv")
 
-topInst <- head(n.institutions[order(n.institutions$Counts, decreasing = T),],10)
-topInst$institution <- ordered(row.names(topInst), levels = row.names(topInst))
+# topInst <- head(n.institutions[order(n.institutions$Counts, decreasing = T),],10)
+# topInst$institution <- ordered(row.names(topInst), levels = row.names(topInst))
 
-topInst  %>%
-  ggplot (aes(institution, Counts)) +
-  geom_bar (stat ="identity") +
-  theme(axis.text.x=element_text(angle=45,hjust=1)) +
-  ggtitle("10 Most Common Institutions")
+# topInst  %>%
+#   ggplot (aes(institution, Counts)) +
+#   geom_bar (stat ="identity") +
+#   theme(axis.text.x=element_text(angle=45,hjust=1)) +
+#   ggtitle("10 Most Common Institutions")
 
 # number of recs per theme
 n.themes <- as.data.frame(colSums(themes))
@@ -95,8 +100,19 @@ topTheme  %>%
   ggtitle("10 Most Common Themes")
 
 # number of recs per sender
-n.sender <- cbind(rownames(sender),rowSums(sender))
-write.csv(n.sender,"Results/c/recs-per-sender.csv")
+n.sender <- data.frame(rowSums(sender))
+names(n.sender) <- c("Counts")
+n.sender$Proportions <- n.sender$Count/nrow(recs)
+write.csv(n.sender,"Results/Descriptive/recs-per-sender.csv")
+
+topSender <- head(n.sender[order(n.sender$Counts, decreasing = T),],20)
+topSender$Country <- ordered(row.names(topSender), levels = row.names(topSender))
+
+topSender  %>%
+  ggplot (aes(Country, Counts)) +
+  geom_bar (stat ="identity") +
+  theme(axis.text.x=element_text(angle=45,hjust=1)) +
+  ggtitle("10 Most Active Countriess")
 
 # keep only those who give at least 100 recs
 sender.100 <- sender[rowSums(sender) > 100,] 
@@ -125,7 +141,7 @@ distance <- as.dist(dissimilarity)
 round(distance, 4) 
 
 # Create a dend
-dend <- distance %>% hclust %>% as.dendrogram
+dend <- distance %>% hclust(method="ward.D") %>% as.dendrogram
 
 # and plot it:
 par(mar=c(8,5,2,2))
@@ -135,7 +151,7 @@ dend %>%
   set("branches_k_color") %>% 
   set("labels_cex", .5) %>% 
   plot
-dend %>% rect.dendrogram(k=2, border = 8, lty = 5, lwd = 2)
+#dend %>% rect.dendrogram(k=2, border = 8, lty = 5, lwd = 2)
 
 # assigning groups
 # dend %>% labels
@@ -240,11 +256,8 @@ correlations <- as.data.frame(cor(data))
 # corrgram(correlations)
 
 dissimilarity <- 1 - cor(data)
-distance <- as.dist(dissimilarity)
-round(distance, 4) 
-
-plot(hclust(distance), 
-     main="Dissimilarity = 1 - Correlation", xlab="")
+d <- as.dist(dissimilarity)
+round(d, 4) 
 
 # euclidean distance
 data <- sender.100
@@ -253,14 +266,13 @@ d
 
 # cosign
 data = as.data.frame(t(sender.100))
-
 d <- cosine(as.matrix(data))
 d <- as.dist(1-d) 
 d
 #plot(hclust(d), main = "Dissimilarity = 1 - Cosine")
 
 # Create a dend:
-dend <- d %>% hclust(method="ward.D") %>% as.dendrogram
+dend <- d %>% hclust %>% as.dendrogram
 
 # and plot it:
 dend %>% 
@@ -269,4 +281,32 @@ dend %>%
   set("labels_cex", .5) %>% 
   hang.dendrogram %>% # hang the leaves
   plot
-dend %>% rect.dendrogram(k=6, border = 8, lty = 5, lwd = 2)
+dend %>% rect.dendrogram(k=5, border = 8, lty = 5, lwd = 2)
+
+
+###################################
+#### Factor Analysis on Sender ####
+###################################
+
+# Maximum Likelihood Factor Analysis
+# entering raw data and extracting 3 factors, 
+# with varimax rotation 
+fit <- factanal(sender.100, 2, rotation="varimax", scores="regression" )
+print(fit, digits=2, cutoff=.3, sort=TRUE)
+
+# plot factor 1 by factor 2 
+load <- fit$loadings[,1:2] 
+plot(load,type="n") # set up plot 
+text(load,labels=names(sender.100),cex=.7) # add variable names
+
+load <- fit$scores
+plot(load,type="n") # set up plot 
+text(load,labels=row.names(sender.100),cex=.7) # add variable names
+
+# determine n factor
+library(nFactors)
+ev <- eigen(cor(sender.100)) # get eigenvalues
+ap <- parallel(subject=nrow(sender.100),var=ncol(sender.100),
+               rep=100,cent=.05)
+nS <- nScree(x=ev$values, aparallel=ap$eigen$qevpea)
+plotnScree(nS)
