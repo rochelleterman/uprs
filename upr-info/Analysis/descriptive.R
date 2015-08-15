@@ -164,42 +164,42 @@ dend %>%
 # socio.econ <- labels(dend)[34:46]
 
 # write function to get number of recs per cluster
-get.cluster.n <- function(cluster){
-  # subset recs with only columsn in cluster
-  y <- recs[,colnames(recs) %in% cluster]
-  
-  # subset recs with at least 1 theme in cluster
-  y.yes <- y[rowSums(y) > 0,]
-  
-  return(nrow(y.yes))
-}
-get.cluster.n(women)
+# get.cluster.n <- function(cluster){
+#   # subset recs with only columsn in cluster
+#   y <- recs[,colnames(recs) %in% cluster]
+#   
+#   # subset recs with at least 1 theme in cluster
+#   y.yes <- y[rowSums(y) > 0,]
+#   
+#  return(nrow(y.yes))
+# }
+# get.cluster.n(women)
 
 # make data frame of cluster - n values
-cluster <- c('civil','security','political','childmigrants','women','discrimination','socio.econ')
-counts <- c(get.cluster.n(civil),
-            get.cluster.n(security),
-            get.cluster.n(political),
-            get.cluster.n(childmigrants),
-            get.cluster.n(women),
-            get.cluster.n(discrimination),
-            get.cluster.n(socio.econ)
-            )
-n.cluster <- data.frame(cluster,counts)
-n.cluster$proportions <- n.cluster$count/nrow(recs)
-n.cluster$cluster <- ordered(n.cluster$cluster, levels = n.cluster$cluster)
-n.cluster
+# cluster <- c('civil','security','political','childmigrants','women','discrimination','socio.econ')
+# counts <- c(get.cluster.n(civil),
+#             get.cluster.n(security),
+#             get.cluster.n(political),
+#             get.cluster.n(childmigrants),
+#             get.cluster.n(women),
+#             get.cluster.n(discrimination),
+#             get.cluster.n(socio.econ)
+#             )
+# n.cluster <- data.frame(cluster,counts)
+# n.cluster$proportions <- n.cluster$count/nrow(recs)
+# n.cluster$cluster <- ordered(n.cluster$cluster, levels = n.cluster$cluster)
+# n.cluster
 
 # save it
-write.csv(n.cluster,"Results/Clustering/recs-per-cluster.csv")
+# write.csv(n.cluster,"Results/Clustering/recs-per-cluster.csv")
 
 # plot it
 
-n.cluster  %>%
-  ggplot (aes(cluster, proportions)) +
-  geom_bar (stat ="identity") +
-  theme(axis.text.x=element_text(angle=45,hjust=1)) +
-  ggtitle("Proportion of Recommendations Per Cluster")
+# n.cluster  %>%
+#   ggplot (aes(cluster, proportions)) +
+#   geom_bar (stat ="identity") +
+#   theme(axis.text.x=element_text(angle=45,hjust=1)) +
+#   ggtitle("Proportion of Recommendations Per Cluster")
 
 #############################################
 #### Clustering - Themes based on Reports ###
