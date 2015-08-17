@@ -24,39 +24,24 @@ documents <- documents[!documents$Response=="Voluntary Pledge",]
 # should be 41066
 nrow(documents)
 
-# write variables
-# names <- cbind(names(documents))
-# write.csv(names, "variables.csv")
-names(documents)
-
-# make 3letter codes for country labels
-documents$To_COW <- countrycode(documents$To, "country.name", "cowc")
-unique(documents$To[is.na(documents$To_COW)])
-documents$To_COW[documents$To=="Serbia"] <- "SRB"
-
-documents$From_COW <- countrycode(documents$From, "country.name", "cowc")
-unique(documents$From[is.na(documents$From_COW)])
-documents$From_COW[documents$From=="Serbia"] <- "SRB"
-documents$From_COW[documents$From=="Palestine"] <- "PLST"
-
 # subset
 names(documents)
-recs <- documents[,c(67,68,8,13:66)] # just keep to, from, session, issue
+recs <- documents[,c(4,8,2,14:68)] # just keep to, from, session, issue
 
 # report as unit of observation
 names(recs)
-temp = recs[,c(1,3:57)]
+temp = recs[,c(1,3,5:58)]
 reports <- ddply(.data=temp, .variables=.(To_COW,Session), numcolwise(sum,na.rm = TRUE))
 row.names(reports) <- paste(reports$To_COW,reports$Session,sep="-")
 reports <- reports[,-c(1,2)]
 
 # themes as unit of observation
 names(recs)
-themes <- recs[,c(4:57)]
+themes <- recs[,c(5:58)] # should be 54 obs
 themes.t <- data.frame(t(themes))
 
 # sender as UOA
-temp <- recs[,c(2,4:57)]
+temp <- recs[,c(2,5:58)]
 sender <- ddply(.data=temp, .variables=.(From_COW), numcolwise(sum,na.rm = TRUE))
 sender <- sender[!is.na(sender$From_COW),]
 row.names(sender) <- sender$From_COW
@@ -123,12 +108,31 @@ write.csv(n.sender.100,"Results/Descriptive/recs-per-sender-100.csv")
 recs.100 <- recs[recs$From_COW %in% rownames(sender.100),]
 nrow(recs.100) / nrow(recs)
 
+# ACTION
+
+summary(documents$Action)
+
 #############################
 #### Clustering - theme ###
 #############################
 
 # http://research.stowers-institute.org/mcm/efg/R/Visualization/cor-cluster/index.htm
 data <- themes[,which(colSums(themes)>50)]
+
+# removing irrelevant themes
+data$International.instruments <- NULL
+data$General <- NULL
+data$International.humanitarian.law <- NULL
+data$NHRI <- NULL
+data$Special.procedures <- NULL
+data$UPR.process <- NULL
+data$Technical.assistance.and.cooperation <- NULL
+data$Treaty.bodies <- NULL
+data$National.plan.of.action <- NULL
+data$Other <- NULL
+data$Human.rights.education.and.training <- NULL
+data$CP.rights...general <- NULL
+data$ESC.rights...general <- NULL
 
 # correlations
 correlations <- as.data.frame(cor(data))
@@ -141,17 +145,19 @@ distance <- as.dist(dissimilarity)
 round(distance, 4) 
 
 # Create a dend
-dend <- distance %>% hclust(method="ward.D") %>% as.dendrogram
+dend <- distance %>% hclust(method="complete") %>% as.dendrogram
 
 # and plot it:
-par(mar=c(8,5,2,2))
+par(mar=c(2,3,2,2))
 
 dend %>% 
   set("labels_col") %>% 
   set("branches_k_color") %>% 
   set("labels_cex", .5) %>% 
+  hang.dendrogram %>% # hang the leaves
   plot
-#dend %>% rect.dendrogram(k=2, border = 8, lty = 5, lwd = 2)
+dend %>% rect.dendrogram(k=2, border = 8, lty = 5, lwd = 2)
+
 
 # assigning groups
 # dend %>% labels
@@ -206,6 +212,20 @@ dend %>%
 #############################################
 
 data <- reports[,which(colSums(reports)>50)]
+# removing irrelevant themes
+data$International.instruments <- NULL
+data$General <- NULL
+data$International.humanitarian.law <- NULL
+data$NHRI <- NULL
+data$Special.procedures <- NULL
+data$UPR.process <- NULL
+data$Technical.assistance.and.cooperation <- NULL
+data$Treaty.bodies <- NULL
+data$National.plan.of.action <- NULL
+data$Other <- NULL
+data$Human.rights.education.and.training <- NULL
+data$CP.rights...general <- NULL
+data$ESC.rights...general <- NULL
 
 ### CORRELATIONS
 
@@ -216,7 +236,7 @@ d <- as.dist(dissimilarity)
 round(d, 4) 
 
 # Create a dend:
-dend <- d %>% hclust %>% as.dendrogram
+dend <- d %>% hclust(method ="mcquitty") %>% as.dendrogram
 
 # and plot it:
 par(mar=c(8,5,2,2))
@@ -227,6 +247,11 @@ dend %>%
   set("labels_cex", .5) %>% 
   plot
 dend %>% rect.dendrogram(k=2, border = 8, lty = 5, lwd = 2)
+
+# EUCLID
+
+d <- dist(t(data))
+d
 
 ## COSINE
 
@@ -310,3 +335,4 @@ ap <- parallel(subject=nrow(sender.100),var=ncol(sender.100),
                rep=100,cent=.05)
 nS <- nScree(x=ev$values, aparallel=ap$eigen$qevpea)
 plotnScree(nS)
+
