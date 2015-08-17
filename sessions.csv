@@ -1,0 +1,306 @@
+"","To","To_COW","Session"
+"1","Algeria","ALG",1
+"2","Argentina","ARG",1
+"3","Bahrain","BAH",1
+"4","Brazil","BRA",1
+"5","Czech Republic","CZR",1
+"6","Ecuador","ECU",1
+"7","Finland","FIN",1
+"8","India","IND",1
+"9","Indonesia","INS",1
+"10","Morocco","MOR",1
+"11","Netherlands","NTH",1
+"12","Philippines","PHI",1
+"13","Poland","POL",1
+"14","South Africa","SAF",1
+"15","Tunisia","TUN",1
+"16","United Kingdom","UKG",1
+"17","Benin","BEN",2
+"18","France","FRN",2
+"19","Gabon","GAB",2
+"20","Ghana","GHA",2
+"21","Guatemala","GUA",2
+"22","Japan","JPN",2
+"23","Mali","MLI",2
+"24","Pakistan","PAK",2
+"25","Peru","PER",2
+"26","Republic of Korea","ROK",2
+"27","Romania","ROM",2
+"28","Sri Lanka","SRI",2
+"29","Switzerland","SWZ",2
+"30","Tonga","TON",2
+"31","Ukraine","UKR",2
+"32","Zambia","ZAM",2
+"33","Bahamas","BHM",3
+"34","Barbados","BAR",3
+"35","Botswana","BOT",3
+"36","Burkina Faso","BFO",3
+"37","Burundi","BUI",3
+"38","Cape Verde","CAP",3
+"39","Colombia","COL",3
+"40","Israel","ISR",3
+"41","Liechtenstein","LIE",3
+"42","Luxembourg","LUX",3
+"43","Montenegro","MNG",3
+"44","Serbia","SRB",3
+"45","Turkmenistan","TKM",3
+"46","Tuvalu","TUV",3
+"47","United Arab Emirates","UAE",3
+"48","Uzbekistan","UZB",3
+"49","Azerbaijan","AZE",4
+"50","Bangladesh","BNG",4
+"51","Cameroon","CAO",4
+"52","Canada","CAN",4
+"53","China","CHN",4
+"54","Cuba","CUB",4
+"55","Djibouti","DJI",4
+"56","Germany","GMY",4
+"57","Jordan","JOR",4
+"58","Malaysia","MAL",4
+"59","Mauritius","MAS",4
+"60","Mexico","MEX",4
+"61","Nigeria","NIG",4
+"62","Russian Federation","RUS",4
+"63","Saudi Arabia","SAU",4
+"64","Senegal","SEN",4
+"65","Afghanistan","AFG",5
+"66","Belize","BLZ",5
+"67","Central African Republic","CEN",5
+"68","Chad","CHA",5
+"69","Chile","CHL",5
+"70","Comoros","COM",5
+"71","Macedonia FYR","MAC",5
+"72","Malta","MLT",5
+"73","Monaco","MNC",5
+"74","New Zealand","NEW",5
+"75","Republic of Congo","CON",5
+"76","Slovakia","SLO",5
+"77","Uruguay","URU",5
+"78","Vanuatu","VAN",5
+"79","Viet Nam","DRV",5
+"80","Yemen","YEM",5
+"81","Albania","ALB",6
+"82","Bhutan","BHU",6
+"83","Brunei Darussalam","BRU",6
+"84","Cambodia","CAM",6
+"85","Costa Rica","COS",6
+"86","Cote d'Ivoire","CDI",6
+"87","Cyprus","CYP",6
+"88","Democratic Republic of Congo","DRC",6
+"89","Dominica","DMA",6
+"90","Dominican Republic","DOM",6
+"91","DPR Korea","PKR",6
+"92","Equatorial Guinea","EQG",6
+"93","Eritrea","ERI",6
+"94","Ethiopia","ETH",6
+"95","Norway","NOR",6
+"96","Portugal","POR",6
+"97","Angola","ANG",7
+"98","Bolivia","BOL",7
+"99","Bosnia & Herzegovina","BOS",7
+"100","Egypt","EGY",7
+"101","El Salvador","SAL",7
+"102","Fiji","FIJ",7
+"103","Gambia","GAM",7
+"104","Iran","IRN",7
+"105","Iraq","IRQ",7
+"106","Italy","ITA",7
+"107","Kazakhstan","KZK",7
+"108","Madagascar","MAG",7
+"109","Nicaragua","NIC",7
+"110","Qatar","QAT",7
+"111","San Marino","SNM",7
+"112","Slovenia","SLV",7
+"113","Armenia","ARM",8
+"114","Belarus","BLR",8
+"115","Grenada","GRN",8
+"116","Guinea","GUI",8
+"117","Guinea Bissau","GNB",8
+"118","Guyana","GUY",8
+"119","Kenya","KEN",8
+"120","Kiribati","KIR",8
+"121","Kuwait","KUW",8
+"122","Kyrgyzstan","KYR",8
+"123","Laos","LAO",8
+"124","Lesotho","LES",8
+"125","Spain","SPN",8
+"126","Sweden","SWD",8
+"127","Turkey","TUR",8
+"128","Andorra","AND",9
+"129","Bulgaria","BUL",9
+"130","Croatia","CRO",9
+"131","Honduras","HON",9
+"132","Jamaica","JAM",9
+"133","Lebanon","LEB",9
+"134","Liberia","LBR",9
+"135","Libya","LIB",9
+"136","Malawi","MAW",9
+"137","Maldives","MAD",9
+"138","Marshall Islands","MSI",9
+"139","Mauritania","MAA",9
+"140","Micronesia","FSM",9
+"141","Mongolia","MON",9
+"142","Panama","PAN",9
+"143","United States","USA",9
+"144","Australia","AUL",10
+"145","Austria","AUS",10
+"146","Estonia","EST",10
+"147","Georgia","GRG",10
+"148","Mozambique","MZM",10
+"149","Myanmar","MYA",10
+"150","Namibia","NAM",10
+"151","Nauru","NAU",10
+"152","Nepal","NEP",10
+"153","Niger","NIR",10
+"154","Oman","OMA",10
+"155","Paraguay","PAR",10
+"156","Rwanda","RWA",10
+"157","Sao Tome & Principe","STP",10
+"158","St Kitts & Nevis","SKN",10
+"159","St Lucia","SLU",10
+"160","Belgium","BEL",11
+"161","Denmark","DEN",11
+"162","Greece","GRC",11
+"163","Hungary","HUN",11
+"164","Latvia","LAT",11
+"165","Palau","PAL",11
+"166","Papua New Guinea","PNG",11
+"167","Samoa","WSM",11
+"168","Seychelles","SEY",11
+"169","Sierra Leone","SIE",11
+"170","Singapore","SIN",11
+"171","Solomon Islands","SOL",11
+"172","Somalia","SOM",11
+"173","St Vincent & the Grenadines","SVG",11
+"174","Sudan","SUD",11
+"175","Suriname","SUR",11
+"176","South Sudan","SSD",11
+"177","Antigua & Barbuda","AAB",12
+"178","Haiti","HAI",12
+"179","Iceland","ICE",12
+"180","Ireland","IRE",12
+"181","Lithuania","LIT",12
+"182","Moldova","MLD",12
+"183","Swaziland","SWA",12
+"184","Syria","SYR",12
+"185","Tajikistan","TAJ",12
+"186","Tanzania","TAZ",12
+"187","Thailand","THI",12
+"188","Timor-Leste","ETM",12
+"189","Togo","TOG",12
+"190","Trinidad & Tobago","TRI",12
+"191","Uganda","UGA",12
+"192","Venezuela","VEN",12
+"193","Zimbabwe","ZIM",12
+"194","Algeria","ALG",13
+"195","Bahrain","BAH",13
+"196","Brazil","BRA",13
+"197","Ecuador","ECU",13
+"198","Finland","FIN",13
+"199","India","IND",13
+"200","Indonesia","INS",13
+"201","Morocco","MOR",13
+"202","Netherlands","NTH",13
+"203","Philippines","PHI",13
+"204","Poland","POL",13
+"205","South Africa","SAF",13
+"206","Tunisia","TUN",13
+"207","United Kingdom","UKG",13
+"208","Argentina","ARG",14
+"209","Benin","BEN",14
+"210","Czech Republic","CZR",14
+"211","Gabon","GAB",14
+"212","Ghana","GHA",14
+"213","Guatemala","GUA",14
+"214","Japan","JPN",14
+"215","Pakistan","PAK",14
+"216","Peru","PER",14
+"217","Republic of Korea","ROK",14
+"218","Sri Lanka","SRI",14
+"219","Switzerland","SWZ",14
+"220","Ukraine","UKR",14
+"221","Zambia","ZAM",14
+"222","Bahamas","BHM",15
+"223","Barbados","BAR",15
+"224","Botswana","BOT",15
+"225","Burundi","BUI",15
+"226","France","FRN",15
+"227","Liechtenstein","LIE",15
+"228","Luxembourg","LUX",15
+"229","Mali","MLI",15
+"230","Montenegro","MNG",15
+"231","Romania","ROM",15
+"232","Serbia","SRB",15
+"233","Tonga","TON",15
+"234","United Arab Emirates","UAE",15
+"235","Azerbaijan","AZE",16
+"236","Bangladesh","BNG",16
+"237","Burkina Faso","BFO",16
+"238","Cameroon","CAO",16
+"239","Canada","CAN",16
+"240","Cape Verde","CAP",16
+"241","Colombia","COL",16
+"242","Cuba","CUB",16
+"243","Djibouti","DJI",16
+"244","Germany","GMY",16
+"245","Russian Federation","RUS",16
+"246","Turkmenistan","TKM",16
+"247","Tuvalu","TUV",16
+"248","Uzbekistan","UZB",16
+"249","Belize","BLZ",17
+"250","Central African Republic","CEN",17
+"251","Chad","CHA",17
+"252","China","CHN",17
+"253","Israel","ISR",17
+"254","Jordan","JOR",17
+"255","Malaysia","MAL",17
+"256","Malta","MLT",17
+"257","Mauritius","MAS",17
+"258","Mexico","MEX",17
+"259","Monaco","MNC",17
+"260","Nigeria","NIG",17
+"261","Republic of Congo","CON",17
+"262","Saudi Arabia","SAU",17
+"263","Senegal","SEN",17
+"264","Afghanistan","AFG",18
+"265","Cambodia","CAM",18
+"266","Chile","CHL",18
+"267","Comoros","COM",18
+"268","Cyprus","CYP",18
+"269","Dominican Republic","DOM",18
+"270","Eritrea","ERI",18
+"271","Macedonia FYR","MAC",18
+"272","New Zealand","NEW",18
+"273","Slovakia","SLO",18
+"274","Uruguay","URU",18
+"275","Vanuatu","VAN",18
+"276","Viet Nam","DRV",18
+"277","Yemen","YEM",18
+"278","Albania","ALB",19
+"279","Bhutan","BHU",19
+"280","Brunei Darussalam","BRU",19
+"281","Costa Rica","COS",19
+"282","Cote d'Ivoire","CDI",19
+"283","Democratic Republic of Congo","DRC",19
+"284","Dominica","DMA",19
+"285","DPR Korea","PKR",19
+"286","Equatorial Guinea","EQG",19
+"287","Ethiopia","ETH",19
+"288","Nicaragua","NIC",19
+"289","Norway","NOR",19
+"290","Portugal","POR",19
+"291","Qatar","QAT",19
+"292","Angola","ANG",20
+"293","Bolivia","BOL",20
+"294","Bosnia & Herzegovina","BOS",20
+"295","Egypt","EGY",20
+"296","El Salvador","SAL",20
+"297","Fiji","FIJ",20
+"298","Gambia","GAM",20
+"299","Iran","IRN",20
+"300","Iraq","IRQ",20
+"301","Italy","ITA",20
+"302","Kazakhstan","KZK",20
+"303","Madagascar","MAG",20
+"304","San Marino","SNM",20
+"305","Slovenia","SLV",20
