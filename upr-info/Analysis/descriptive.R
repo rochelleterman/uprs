@@ -16,7 +16,7 @@ library(plyr)
 #### Prepare Data ####
 ######################
 
-documents <- read.csv('~/Dropbox/berkeley/Dissertation/Data and Analyais/Git Repos/uprs/upr-info/Data/all-upr-info-binary.csv', stringsAsFactors = F)
+documents <- read.csv('~/Dropbox/berkeley/Dissertation/Data and Analyais/Git Repos/uprs/upr-info/Data/upr-info-binary.csv', stringsAsFactors = F)
 
 # take out voluntary pledges
 documents <- documents[!documents$Response=="Voluntary Pledge",]
@@ -25,46 +25,46 @@ documents <- documents[!documents$Response=="Voluntary Pledge",]
 nrow(documents)
 
 # subset
-recs <- documents[,c(4,8,2,14:68)] # just keep to, from, session, issue
+recs <- documents[,c(4,8,2,17:70)] # just keep to, from, session, issues
 
 # report as unit of observation
-temp = recs[,c(1,3,5:58)]
+temp = recs[,c(1,3,4:57)] # keep to, session, issues
 reports <- ddply(.data=temp, .variables=.(To_COW,Session), numcolwise(sum,na.rm = TRUE))
 row.names(reports) <- paste(reports$To_COW,reports$Session,sep="-")
 reports <- reports[,-c(1,2)]
 
 # themes as unit of observation
-themes <- recs[,c(5:58)] # should be 54 obs
+themes <- recs[,c(4:57)] # should be 54 obs
 themes.t <- data.frame(t(themes))
 
 # sender as UOA
-temp <- recs[,c(2,5:58)]
+temp <- recs[,c(2,4:57)] # from, issues
 sender <- ddply(.data=temp, .variables=.(From_COW), numcolwise(sum,na.rm = TRUE))
 sender <- sender[!is.na(sender$From_COW),]
 row.names(sender) <- sender$From_COW
 sender$From_COW <- NULL
 
-# institutions
-# inst <- documents[,c(12:64)] # just keep to, from, year, institutions
+#institutions
+inst <- documents[,c(71:123)] # just institutions
 
 ###########################
 #### Descriptive Stats ###
 ##########################
 
 # number of recs per institution
-# n.institutions <- as.data.frame(colSums(inst))
-# names(n.institutions) <- "Counts"
-# n.institutions$Proportions <- n.institutions$Count/nrow(recs)
-# write.csv(n.institutions, "Results/Descriptive/recs-per-institution.csv")
+n.institutions <- as.data.frame(colSums(inst))
+names(n.institutions) <- "Counts"
+n.institutions$Proportions <- n.institutions$Count/nrow(recs)
+write.csv(n.institutions, "Results/Descriptive/recs-per-institution.csv")
 
-# topInst <- head(n.institutions[order(n.institutions$Counts, decreasing = T),],10)
-# topInst$institution <- ordered(row.names(topInst), levels = row.names(topInst))
+topInst <- head(n.institutions[order(n.institutions$Counts, decreasing = T),],10)
+topInst$institution <- ordered(row.names(topInst), levels = row.names(topInst))
 
-# topInst  %>%
-#   ggplot (aes(institution, Counts)) +
-#   geom_bar (stat ="identity") +
-#   theme(axis.text.x=element_text(angle=45,hjust=1)) +
-#   ggtitle("10 Most Common Institutions")
+topInst  %>%
+  ggplot (aes(institution, Counts)) +
+  geom_bar (stat ="identity") +
+  theme(axis.text.x=element_text(angle=45,hjust=1)) +
+  ggtitle("10 Most Common Institutions")
 
 # number of recs per theme
 n.themes <- as.data.frame(colSums(themes))
@@ -118,9 +118,7 @@ write.csv("Results/Descriptive/top-senders-theme.csv")
 which(sender.norm == max(sender.norm), arr.ind = TRUE)
 names(sender.norm)[12] # disappearances...?
 
-
 # ACTION
-
 table(documents$Action)
 write.csv(table(documents$Action),"Results/Descriptive/Actions.csv")
 
@@ -157,7 +155,7 @@ distance <- as.dist(dissimilarity)
 round(distance, 4) 
 
 # Create a dend
-dend <- distance %>% hclust(method="complete") %>% as.dendrogram
+dend <- distance %>% hclust(method="mcquitty") %>% as.dendrogram
 
 # and plot it:
 par(mar=c(2,3,2,2))
@@ -168,18 +166,20 @@ dend %>%
   set("labels_cex", .5) %>% 
   hang.dendrogram %>% # hang the leaves
   plot
-dend %>% rect.dendrogram(k=2, border = 8, lty = 5, lwd = 2)
 
 
 # assigning groups
-# dend %>% labels
-# civil <- labels(dend)[1:3]
-# security <- labels(dend)[4:9]
-# political <- labels(dend)[10:16]
-# childmigrants <- labels(dend)[17:21]
-# women <- labels(dend)[22:28]
-# discrimination <- labels(dend)[29:33]
-# socio.econ <- labels(dend)[34:46]
+dend %>% labels
+traffchildwomen <- labels(dend)[2:4]
+physint <- labels(dend)[c(1,5:10)]
+justice <- labels(dend)[11:14]
+political <- labels(dend)[15:20]
+discrimination <- labels(dend)[21:23]
+migrants <- labels(dend)[24:28]
+socio.econ <- labels(dend)[29:38]
+voln.populations <- labels(39:41)
+
+traffchildwomen
 
 # write function to get number of recs per cluster
 # get.cluster.n <- function(cluster){
