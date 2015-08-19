@@ -25,18 +25,15 @@ documents <- documents[!documents$Response=="Voluntary Pledge",]
 nrow(documents)
 
 # subset
-names(documents)
 recs <- documents[,c(4,8,2,14:68)] # just keep to, from, session, issue
 
 # report as unit of observation
-names(recs)
 temp = recs[,c(1,3,5:58)]
 reports <- ddply(.data=temp, .variables=.(To_COW,Session), numcolwise(sum,na.rm = TRUE))
 row.names(reports) <- paste(reports$To_COW,reports$Session,sep="-")
 reports <- reports[,-c(1,2)]
 
 # themes as unit of observation
-names(recs)
 themes <- recs[,c(5:58)] # should be 54 obs
 themes.t <- data.frame(t(themes))
 
@@ -108,9 +105,24 @@ write.csv(n.sender.100,"Results/Descriptive/recs-per-sender-100.csv")
 recs.100 <- recs[recs$From_COW %in% rownames(sender.100),]
 nrow(recs.100) / nrow(recs)
 
+# summary of senders and themes
+sender.norm <- sweep(sender.100,2,colSums(sender.100),`/`)
+write.csv(sender.norm, "Results/Descriptive/prop-themes-sender.csv")
+
+# Find top countries for each theme
+x <- apply(sender.norm, 2, which.max)
+y <- sender.norm[x,]  
+top.senders.themes <- cbind(names(x), rownames(y), diag(as.matrix(y)))
+write.csv("Results/Descriptive/top-senders-theme.csv")
+
+which(sender.norm == max(sender.norm), arr.ind = TRUE)
+names(sender.norm)[12] # disappearances...?
+
+
 # ACTION
 
-summary(documents$Action)
+table(documents$Action)
+write.csv(table(documents$Action),"Results/Descriptive/Actions.csv")
 
 #############################
 #### Clustering - theme ###
