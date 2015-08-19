@@ -16,10 +16,13 @@ library(plyr)
 #### Prepare Data ####
 ######################
 
-documents <- read.csv('~/Dropbox/berkeley/Dissertation/Data and Analyais/Git Repos/uprs/upr-info/Data/upr-info-binary.csv', stringsAsFactors = F)
+documents <- read.csv('../Data/upr-info-binary.csv', stringsAsFactors = F)
 
 # take out voluntary pledges
 documents <- documents[!documents$Response=="Voluntary Pledge",]
+
+# write
+write.csv(documents, "../Data/Recs-only/upr-info-recs-binary.csv")
 
 # should be 41066
 nrow(documents)
@@ -69,6 +72,7 @@ topInst  %>%
 # number of recs per theme
 n.themes <- as.data.frame(colSums(themes))
 names(n.themes) <- "Counts"
+sum(n.themes$Counts)
 n.themes$Proportions <- n.themes$Count/nrow(recs)
 write.csv(n.themes, "Results/Descriptive/recs-per-theme.csv")
 
@@ -82,23 +86,25 @@ topTheme  %>%
   ggtitle("10 Most Common Themes")
 
 # number of recs per sender
-n.sender <- data.frame(rowSums(sender))
-names(n.sender) <- c("Counts")
-n.sender$Proportions <- n.sender$Count/nrow(recs)
+recs$From_COW <- as.factor(recs$From_COW)
+n.sender <- ddply(.data=documents, .variables=.(From_COW), summarize, Count=length(From_COW))
+sum(n.sender$Count)
+n.sender$Proportions <- n.sender$Count/41066
 write.csv(n.sender,"Results/Descriptive/recs-per-sender.csv")
 
-topSender <- head(n.sender[order(n.sender$Counts, decreasing = T),],20)
-topSender$Country <- ordered(row.names(topSender), levels = row.names(topSender))
+topSender <- head(n.sender[order(n.sender$Count, decreasing = T),],20)
+names(topSender)
+topSender$Country <- ordered(topSender$From_COW, levels = topSender$From_COW)
 
 topSender  %>%
-  ggplot (aes(Country, Counts)) +
+  ggplot (aes(Country, Count)) +
   geom_bar (stat ="identity") +
   theme(axis.text.x=element_text(angle=45,hjust=1)) +
   ggtitle("10 Most Active Countriess")
 
 # keep only those who give at least 100 recs
-sender.100 <- sender[rowSums(sender) > 100,] 
-n.sender.100<- cbind(rownames(sender.100),rowSums(sender.100))
+n.sender.100 <- n.sender[n.sender$Count > 100,]
+sender.100 <- sender[row.names(sender) %in% n.sender.100$From_COW,]
 write.csv(n.sender.100,"Results/Descriptive/recs-per-sender-100.csv")
 
 # number of recs with only >100 senders
@@ -106,8 +112,10 @@ recs.100 <- recs[recs$From_COW %in% rownames(sender.100),]
 nrow(recs.100) / nrow(recs)
 
 # summary of senders and themes
+# normalize
 sender.norm <- sweep(sender.100,2,colSums(sender.100),`/`)
-write.csv(sender.norm, "Results/Descriptive/prop-themes-sender.csv")
+sum(sender.norm$Asylum.seekers...refugees) # should be 1
+write.csv(sender.norm, "Results/Descriptive/prop-themes-per-sender.csv")
 
 # Find top countries for each theme
 x <- apply(sender.norm, 2, which.max)
@@ -189,30 +197,67 @@ get.cluster.n <- function(cluster){
 get.cluster.n(voln.populations)
 
 # make data frame of cluster - n values
-cluster <- c('civil','security','political','childmigrants','women','discrimination','socio.econ')
-counts <- c(get.cluster.n(civil),
-            get.cluster.n(security),
+cluster <- c('traffchildwomen','physint','justice','political','discrimination','migrants','socio.econ','voln.populations')
+counts <- c(get.cluster.n(traffchildwomen),
+            get.cluster.n(physint),
+            get.cluster.n(justice),
             get.cluster.n(political),
-            get.cluster.n(childmigrants),
-            get.cluster.n(women),
             get.cluster.n(discrimination),
-            get.cluster.n(socio.econ)
+            get.cluster.n(migrants),
+            get.cluster.n(socio.econ),
+            get.cluster.n(voln.populations)
             )
 n.cluster <- data.frame(cluster,counts)
 n.cluster$proportions <- n.cluster$count/nrow(recs)
 n.cluster$cluster <- ordered(n.cluster$cluster, levels = n.cluster$cluster)
-# n.cluster
+n.cluster
 
 # save it
-# write.csv(n.cluster,"Results/Clustering/recs-per-cluster.csv")
+write.csv(n.cluster,"Results/Clustering/recs-per-cluster.csv")
 
 # plot it
+n.cluster  %>%
+  ggplot (aes(cluster, proportions)) +
+  geom_bar (stat ="identity") +
+  theme(axis.text.x=element_text(angle=45,hjust=1)) +
+  ggtitle("Proportion of Recommendations Per Cluster")
 
-# n.cluster  %>%
-#   ggplot (aes(cluster, proportions)) +
-#   geom_bar (stat ="identity") +
-#   theme(axis.text.x=element_text(angle=45,hjust=1)) +
-#   ggtitle("Proportion of Recommendations Per Cluster")
+# ADD BINARY COLUMNS INDICATING CLUSTER
+
+binary <- function(cluster){
+  # subset recs with only columns in cluster
+  y <- recs[,colnames(recs) %in% cluster]
+  
+  # get index of recs with at least 1 theme in cluster
+  return(which(rowSums(y) > 0))
+}
+
+documents$traffchildwomen <- 0
+documents$traffchildwomen[binary(traffchildwomen)] <- 1
+
+documents$physint <- 0
+documents$physint[binary(physint)] <- 1
+
+documents$justice <- 0
+documents$justice[binary(justice)] <- 1
+
+documents$political <- 0
+documents$political[binary(political)] <- 1
+
+documents$discrimination <- 0
+documents$discrimination[binary(discrimination)] <- 1
+
+documents$migrants <- 0
+documents$migrants[binary(migrants)] <- 1
+
+documents$socio.econ <- 0
+documents$socio.econ[binary(socio.econ)] <- 1
+
+documents$voln.populations <- 0
+documents$voln.populations[binary(voln.populations)] <- 1
+
+write.csv(documents, "../Data/upr-orig-clusters.csv")
+
 
 #############################################
 #### Clustering - Themes based on Reports ###
