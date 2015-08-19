@@ -147,10 +147,8 @@ data$ESC.rights...general <- NULL
 # correlations
 correlations <- as.data.frame(cor(data))
 #corrgram(correlations)
-
 dissimilarity <- 1 - cor(data)
 dissimilarity
-
 distance <- as.dist(dissimilarity)
 round(distance, 4) 
 
@@ -167,8 +165,7 @@ dend %>%
   hang.dendrogram %>% # hang the leaves
   plot
 
-
-# assigning groups
+# Assigning groups
 dend %>% labels
 traffchildwomen <- labels(dend)[2:4]
 physint <- labels(dend)[c(1,5:10)]
@@ -177,35 +174,33 @@ political <- labels(dend)[15:20]
 discrimination <- labels(dend)[21:23]
 migrants <- labels(dend)[24:28]
 socio.econ <- labels(dend)[29:38]
-voln.populations <- labels(39:41)
-
-traffchildwomen
+voln.populations <- labels(dend)[39:41]
 
 # write function to get number of recs per cluster
-# get.cluster.n <- function(cluster){
-#   # subset recs with only columsn in cluster
-#   y <- recs[,colnames(recs) %in% cluster]
-#   
-#   # subset recs with at least 1 theme in cluster
-#   y.yes <- y[rowSums(y) > 0,]
-#   
-#  return(nrow(y.yes))
-# }
-# get.cluster.n(women)
+get.cluster.n <- function(cluster){
+  # subset recs with only columsn in cluster
+  y <- recs[,colnames(recs) %in% cluster]
+  
+  # subset recs with at least 1 theme in cluster
+  y.yes <- y[rowSums(y) > 0,]
+  
+ return(nrow(y.yes))
+}
+get.cluster.n(voln.populations)
 
 # make data frame of cluster - n values
-# cluster <- c('civil','security','political','childmigrants','women','discrimination','socio.econ')
-# counts <- c(get.cluster.n(civil),
-#             get.cluster.n(security),
-#             get.cluster.n(political),
-#             get.cluster.n(childmigrants),
-#             get.cluster.n(women),
-#             get.cluster.n(discrimination),
-#             get.cluster.n(socio.econ)
-#             )
-# n.cluster <- data.frame(cluster,counts)
-# n.cluster$proportions <- n.cluster$count/nrow(recs)
-# n.cluster$cluster <- ordered(n.cluster$cluster, levels = n.cluster$cluster)
+cluster <- c('civil','security','political','childmigrants','women','discrimination','socio.econ')
+counts <- c(get.cluster.n(civil),
+            get.cluster.n(security),
+            get.cluster.n(political),
+            get.cluster.n(childmigrants),
+            get.cluster.n(women),
+            get.cluster.n(discrimination),
+            get.cluster.n(socio.econ)
+            )
+n.cluster <- data.frame(cluster,counts)
+n.cluster$proportions <- n.cluster$count/nrow(recs)
+n.cluster$cluster <- ordered(n.cluster$cluster, levels = n.cluster$cluster)
 # n.cluster
 
 # save it
