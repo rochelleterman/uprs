@@ -9,7 +9,7 @@ library(plyr)
 #### Load Data ####
 ######################
 
-documents <- read.csv('../Data/upr-info.csv', stringsAsFactors = F)
+documents <- read.csv('../Data/upr-info-clusters.csv', stringsAsFactors = F)
 
 ######################
 #### Country Codes ####
@@ -19,14 +19,14 @@ documents <- read.csv('../Data/upr-info.csv', stringsAsFactors = F)
 documents$To_COW <- countrycode(documents$To, "country.name", "cowc")
 unique(documents$To[is.na(documents$To_COW)])
 documents$To_COW[documents$To=="Serbia"] <- "SRB"
-documents$To_COW[documents$To=="DPR Korea"] <- "PKR"
+documents$To_COW[documents$To=="DPR Korea"] <- "PRK"
 
 documents$From_COW <- countrycode(documents$From, "country.name", "cowc")
 unique(documents$From[is.na(documents$From_COW)])
 documents$From_COW[documents$From=="Serbia"] <- "SRB"
 documents$From_COW[documents$From=="Palestine"] <- "PLST"
 documents$From_COW[documents$From=="&#40;Unknown&#41;"] <- "NA"
-documents$From_COW[documents$From=="DPR Korea"] <- "PKR"
+documents$From_COW[documents$From=="DPR Korea"] <- "PRK"
 
 #############
 #### UID ####
@@ -55,7 +55,7 @@ documents$UID[1]
 
 ### Write
 
-write.csv(documents,'../Data/upr-info.csv', row.names = F)
+write.csv(documents,'../Data/upr-info-clusters.csv', row.names = F)
 
 
 

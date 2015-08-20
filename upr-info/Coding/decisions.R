@@ -10,7 +10,6 @@ library(ggplot2)
 library(readstata13)
 library(plyr)
 library(qdap)
-library(car)
 
 # Load Data
 info <- read.csv('upr-info/Data/upr-info.csv', stringsAsFactors = F)
