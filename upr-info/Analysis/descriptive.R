@@ -267,7 +267,9 @@ documents$socio.econ[binary(socio.econ)] <- 1
 documents$voln.populations <- 0
 documents$voln.populations[binary(voln.populations)] <- 1
 
-write.csv(documents, "../Data/upr-orig-clusters.csv")
+sum(documents$voln.populations)
+
+write.csv(documents, "../Data/upr-info-clusters.csv")
 
 
 #############################################

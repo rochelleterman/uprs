@@ -9,7 +9,7 @@ library(plyr)
 #### Load Data ####
 ######################
 
-documents <- read.csv('../Data/upr-info-binary.csv', stringsAsFactors = F)
+documents <- read.csv('../Data/upr-info.csv', stringsAsFactors = F)
 
 ######################
 #### Country Codes ####
@@ -55,7 +55,7 @@ documents$UID[1]
 
 ### Write
 
-write.csv(documents,'../Data/upr-info-binary.csv', row.names = F)
+write.csv(documents,'../Data/upr-info.csv', row.names = F)
 
 
 

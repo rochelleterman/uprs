@@ -24,6 +24,7 @@ unique(documents$To[is.na(documents$To_COW)])
 documents$To_COW[documents$To=="Serbia"] <- "SRB"
 documents$To_COW[documents$To=="serbia"] <- "SRB"
 documents$To_COW[documents$To=="kyrgysztan"] <- "KYR"
+documents$From_COW[documents$From=="North Korea"] <- "PKR"
 documents$To_COW <- as.factor(documents$To_COW)
 
 documents$From_COW <- countrycode(documents$From, "country.name", "cowc")
