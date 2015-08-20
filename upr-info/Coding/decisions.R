@@ -17,6 +17,8 @@ info <- read.csv('upr-info/Data/upr-info.csv', stringsAsFactors = F)
 # take out voluntary pledges
 info <- info[!info$Response=="Voluntary Pledge",]
 
+write.csv(info, "upr-info/Data/upr-info.csv")
+
 info <- arrange(info, To_COW, From_COW, Session, Text)
 
 # original
@@ -47,7 +49,7 @@ info$first.word <- as.character(lapply(info$Text, beg2char, char = " ", noc = 5)
 orig$first.word <- lapply(orig$first.word, tolower)
 info$first.word <- lapply(info$first.word, tolower)
 
-#trim
+# trim
 orig$first.word <- as.character(lapply(orig$first.word, Trim))
 info$first.word <- as.character(lapply(info$first.word, Trim))
 
@@ -95,7 +97,7 @@ info$uid.word <- NULL
 info$UID.1 <- NULL
 
 # write.csv
-write.csv(info, "upr-info/Data/upr-info-with-decision.csv")
+write.csv(info, "upr-info/Data/upr-info.csv", row.names = F)
 
 info$Decision.Guess <- as.factor(info$Decision.Guess)
 summary(info$Decision.Guess)
