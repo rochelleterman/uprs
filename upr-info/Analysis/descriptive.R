@@ -22,7 +22,7 @@ documents <- read.csv('../Data/upr-info-binary.csv', stringsAsFactors = F)
 documents <- documents[!documents$Response=="Voluntary Pledge",]
 
 # write
-write.csv(documents, "../Data/Recs-only/upr-info-recs-binary.csv")
+# write.csv(documents, "../Data/Recs-only/upr-info-recs-binary.csv")
 
 # should be 41066
 nrow(documents)
@@ -30,29 +30,34 @@ nrow(documents)
 # subset
 recs <- documents[,c(4,8,2,17:70)] # just keep to, from, session, issues
 
-# report as unit of observation
+# REPORT as unit of observation
 temp = recs[,c(1,3,4:57)] # keep to, session, issues
 reports <- ddply(.data=temp, .variables=.(To_COW,Session), numcolwise(sum,na.rm = TRUE))
 row.names(reports) <- paste(reports$To_COW,reports$Session,sep="-")
 reports <- reports[,-c(1,2)]
 
-# themes as unit of observation
+# THEMES as unit of observation
 themes <- recs[,c(4:57)] # should be 54 obs
 themes.t <- data.frame(t(themes))
 
-# sender as UOA
+# SENDER as UOA
 temp <- recs[,c(2,4:57)] # from, issues
 sender <- ddply(.data=temp, .variables=.(From_COW), numcolwise(sum,na.rm = TRUE))
 sender <- sender[!is.na(sender$From_COW),]
 row.names(sender) <- sender$From_COW
 sender$From_COW <- NULL
 
-#institutions
+# INSTITUTIONS as obs.
 inst <- documents[,c(71:123)] # just institutions
 
 ###########################
 #### Descriptive Stats ###
 ##########################
+
+# number of recs per report
+temp = recs[,c(1,3,4:57)] # keep to, session, issues
+n.report <- count(temp, c("To_COW","Session"))
+n.report <- arrange(n.report, freq)
 
 # number of recs per institution
 n.institutions <- as.data.frame(colSums(inst))
@@ -64,12 +69,12 @@ topInst <- head(n.institutions[order(n.institutions$Counts, decreasing = T),],10
 topInst$institution <- ordered(row.names(topInst), levels = row.names(topInst))
 
 topInst  %>%
-  ggplot (aes(institution, Counts)) +
-  geom_bar (stat ="identity") +
+  ggplot (aes(institution, Counts, fill = institution)) +
+  geom_bar(stat ="identity") +
   theme(axis.text.x=element_text(angle=45,hjust=1)) +
   ggtitle("10 Most Common Institutions")
 
-# number of recs per theme
+# number of recs per THEME
 n.themes <- as.data.frame(colSums(themes))
 names(n.themes) <- "Counts"
 sum(n.themes$Counts)
@@ -80,38 +85,39 @@ topTheme <- head(n.themes[order(n.themes$Counts, decreasing = T),],10)
 topTheme$Theme <- ordered(row.names(topTheme), levels = row.names(topTheme))
 
 topTheme  %>%
-  ggplot (aes(Theme, Counts)) +
+  ggplot (aes(Theme, Counts, fill=Theme)) +
   geom_bar (stat ="identity") +
   theme(axis.text.x=element_text(angle=45,hjust=1)) +
   ggtitle("10 Most Common Themes")
 
-# number of recs per sender
+# number of recs per SENDER
 recs$From_COW <- as.factor(recs$From_COW)
-n.sender <- ddply(.data=documents, .variables=.(From_COW), summarize, Count=length(From_COW))
-sum(n.sender$Count)
-n.sender$Proportions <- n.sender$Count/41066
+n.sender <- count(documents, "From_COW")
+sum(n.sender$freq) # should be 41066
+n.sender$Proportions <- n.sender$freq/41066
 write.csv(n.sender,"Results/Descriptive/recs-per-sender.csv")
 
-topSender <- head(n.sender[order(n.sender$Count, decreasing = T),],20)
+topSender <- head(n.sender[order(n.sender$freq, decreasing = T),],20)
 names(topSender)
 topSender$Country <- ordered(topSender$From_COW, levels = topSender$From_COW)
 
 topSender  %>%
-  ggplot (aes(Country, Count)) +
-  geom_bar (stat ="identity") +
+  ggplot(aes(Country, freq)) +
+  geom_point (stat ="identity") +
   theme(axis.text.x=element_text(angle=45,hjust=1)) +
   ggtitle("10 Most Active Countriess")
 
 # keep only those who give at least 100 recs
-n.sender.100 <- n.sender[n.sender$Count > 100,]
+n.sender.100 <- n.sender[n.sender$freq > 100,]
 sender.100 <- sender[row.names(sender) %in% n.sender.100$From_COW,]
 write.csv(n.sender.100,"Results/Descriptive/recs-per-sender-100.csv")
 
 # number of recs with only >100 senders
-recs.100 <- recs[recs$From_COW %in% rownames(sender.100),]
+recs.100 <- recs[recs$From_COW %in% n.sender.100$From_COW,]
 nrow(recs.100) / nrow(recs)
 
 # summary of senders and themes
+
 # normalize
 sender.norm <- sweep(sender.100,2,colSums(sender.100),`/`)
 sum(sender.norm$Asylum.seekers...refugees) # should be 1
@@ -129,6 +135,10 @@ names(sender.norm)[12] # disappearances...?
 # ACTION
 table(documents$Action)
 write.csv(table(documents$Action),"Results/Descriptive/Actions.csv")
+
+# N RECS PER REPORT
+
+n.reports <- table(reports)
 
 #############################
 #### Clustering - theme ###
@@ -164,14 +174,14 @@ round(distance, 4)
 dend <- distance %>% hclust(method="mcquitty") %>% as.dendrogram
 
 # and plot it:
-par(mar=c(2,3,2,2))
+par(mar=c(3,3,2,14))
 
 dend %>% 
-  set("labels_col") %>% 
+  set("labels_col", value = c("maroon2","red","orange","olivedrab3","olivedrab3","olivedrab3","steelblue2","steelblue2","royalblue4","purple","purple", "maroon2", "maroon2","red","red"), k=15) %>% 
   set("branches_k_color") %>% 
-  set("labels_cex", .5) %>% 
-  hang.dendrogram %>% # hang the leaves
-  plot
+  set("labels_cex", .8) %>% 
+  #hang.dendrogram %>% # hang the leaves
+  plot(horiz=T)
 
 # Assigning groups
 dend %>% labels
@@ -217,7 +227,7 @@ write.csv(n.cluster,"Results/Clustering/recs-per-cluster.csv")
 
 # plot it
 n.cluster  %>%
-  ggplot (aes(cluster, proportions)) +
+  ggplot (aes(cluster, proportions, fill=cluster)) +
   geom_bar (stat ="identity") +
   theme(axis.text.x=element_text(angle=45,hjust=1)) +
   ggtitle("Proportion of Recommendations Per Cluster")
@@ -327,8 +337,20 @@ vdend %>% rect.dendrogram(k=2, border = 8, lty = 5, lwd = 2)
 ##############################
 
 # correlations
-data = as.data.frame(t(sender))
+data = (sender.100)
+data$International.instruments <- NULL
+data$General <- NULL
+data$International.humanitarian.law <- NULL
+data$NHRI <- NULL
+data$Special.procedures <- NULL
+data$UPR.process <- NULL
+data$Technical.assistance.and.cooperation <- NULL
+data$Treaty.bodies <- NULL
+data$National.plan.of.action <- NULL
+data$Other <- NULL
+data$Human.rights.education.and.training <- NULL
 
+data = as.data.frame(t(data))
 correlations <- as.data.frame(cor(data))
 # corrgram(correlations)
 
@@ -342,22 +364,36 @@ d <- dist(data,method="euclidean")
 d
 
 # cosign
-data = as.data.frame(t(sender.100))
+data = (sender.100)
+data$International.instruments <- NULL
+data$General <- NULL
+data$International.humanitarian.law <- NULL
+data$NHRI <- NULL
+data$Special.procedures <- NULL
+data$UPR.process <- NULL
+data$Technical.assistance.and.cooperation <- NULL
+data$Treaty.bodies <- NULL
+data$National.plan.of.action <- NULL
+data$Other <- NULL
+data$Human.rights.education.and.training <- NULL
+
+data <- as.data.frame(t(data))
+
 d <- cosine(as.matrix(data))
 d <- as.dist(1-d) 
 d
 #plot(hclust(d), main = "Dissimilarity = 1 - Cosine")
 
 # Create a dend:
-dend <- d %>% hclust %>% as.dendrogram
+dend <- d %>% hclust(method="complete") %>% as.dendrogram
 
 # and plot it:
 dend %>% 
   set("labels_col") %>% 
   set("branches_k_color") %>% 
-  set("labels_cex", .5) %>% 
+  set("labels_cex", .8) %>% 
   hang.dendrogram %>% # hang the leaves
-  plot
+  plot(horiz=T)
 dend %>% rect.dendrogram(k=5, border = 8, lty = 5, lwd = 2)
 
 

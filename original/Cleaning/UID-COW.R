@@ -12,6 +12,8 @@ library(reshape2)
 
 documents <- read.csv('~/Dropbox/berkeley/Dissertation/Data and Analyais/Git Repos/uprs/original/Data/upr-orig.csv', stringsAsFactors = F)
 
+names(documents)
+
 ######################
 #### Country Codes ####
 ######################
@@ -89,7 +91,7 @@ names(documents)[2] <- "Report_Year"
 #############
 
 # arrange
-documents <- arrange(documents, Session, To_COW, From_COW)
+documents <- arrange(documents, To_COW, From_COW, Session, Text)
 
 uid <- function(to, from, session) paste(to, from, session, sep = "-")
 documents$UID <- mapply(uid, documents$To_COW, documents$From_COW, documents$Session)
@@ -99,11 +101,14 @@ get.par <- function(x){
   return(1:nrow(x))
 }
 
-y <- dlply(.data=documents, .variables=.(To_COW, Session), .fun = get.par)
-y <- unlist(y)
+y <- dlply(.data=documents, .variables=.(To_COW, From_COW, Session), get.par)
+y[4]
+
+x <- unlist(y)
+x[1:20]
 
 uid <- function(uid, par) paste(uid, par, sep="-")
-documents$UID <- mapply(uid, documents$UID, y)
+documents$UID <- mapply(uid, documents$UID, x)
 documents$UID[1]
 
 ### Order
@@ -113,4 +118,3 @@ documents = documents[,c("UID","Session","Session_Year","Report_Year","To","To_C
 ### Write
 
 write.csv(documents,'~/Dropbox/berkeley/Dissertation/Data and Analyais/Git Repos/uprs/original/Data/upr-orig.csv', row.names = F)
-

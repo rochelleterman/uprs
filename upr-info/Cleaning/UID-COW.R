@@ -9,7 +9,7 @@ library(plyr)
 #### Load Data ####
 ######################
 
-documents <- read.csv('~/Dropbox/berkeley/Dissertation/Data and Analyais/Git Repos/uprs/upr-info/Data/all-upr-info.csv', stringsAsFactors = F)
+documents <- read.csv('../Data/upr-info-binary.csv', stringsAsFactors = F)
 
 ######################
 #### Country Codes ####
@@ -32,7 +32,8 @@ documents$From_COW[documents$From=="DPR Korea"] <- "PKR"
 #### UID ####
 #############
 
-documents <- arrange(documents, Session, To_COW, From_COW)
+# arrange
+documents <- arrange(documents, To_COW, From_COW, Session, Text)
 
 uid <- function(to, from, session) paste(to, from, session, sep = "-")
 documents$UID <- mapply(uid, documents$To_COW, documents$From_COW, documents$Session)
@@ -42,19 +43,23 @@ get.par <- function(x){
   return(1:nrow(x))
 }
 
-y <- dlply(.data=documents, .variables=.(To_COW, Session), .fun = get.par)
-y <- unlist(y)
+y <- dlply(.data=documents, .variables=.(To_COW, From_COW, Session), get.par)
+y[4]
+
+x <- unlist(y)
+x[1:20]
 
 uid <- function(uid, par) paste(uid, par, sep="-")
-documents$UID <- mapply(uid, documents$UID, y)
+documents$UID <- mapply(uid, documents$UID, x)
 documents$UID[1]
-
-### Order
-documents = documents[,c("UID","Session","To","To_COW","To.Rgrp","To.Org","From","From_COW","From.Rgrp","From.Org","Text","Action","Response","Issue")]
 
 ### Write
 
-write.csv(documents,'~/Dropbox/berkeley/Dissertation/Data and Analyais/Git Repos/uprs/upr-info/Data/all-upr-info.csv', row.names = F)
+write.csv(documents,'../Data/upr-info-binary.org', row.names = F)
+
+
+
+
 
 ### Get Country Sessions Data
 

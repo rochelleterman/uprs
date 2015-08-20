@@ -67,11 +67,11 @@ training <- sample(1:900, 800)
 test <- all[! all %in% training]
 
 # CREATE THE DOCUMENT-TERM MATRIX
-doc_matrix <- create_matrix(coded$text, language="english", removeNumbers=TRUE,
+doc_matrix <- create_matrix(documents$Text, language="english", removeNumbers=TRUE,
                             stemWords=TRUE, removeSparseTerms=.998)
 
 # CREATE CONTAINER
-container <- create_container(doc_matrix, coded$sentiment, trainSize=training,
+container <- create_container(doc_matrix, documents$Child, trainSize=training,
                               testSize=test, virgin=F)
 
 # RUN NINE DIFFERENT TRAINING MODELS
