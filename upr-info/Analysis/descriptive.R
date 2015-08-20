@@ -11,6 +11,7 @@ library('dendextendRcpp')
 library(ggplot2)
 library(readstata13)
 library(plyr)
+library(dplyr)
 
 ######################
 #### Prepare Data ####
@@ -22,7 +23,7 @@ documents <- read.csv('../Data/upr-info-binary.csv', stringsAsFactors = F)
 documents <- documents[!documents$Response=="Voluntary Pledge",]
 
 # write
-# write.csv(documents, "../Data/Recs-only/upr-info-recs-binary.csv")
+write.csv(documents, "../Data/Recs-only/upr-info-recs-binary.csv")
 
 # should be 41066
 nrow(documents)

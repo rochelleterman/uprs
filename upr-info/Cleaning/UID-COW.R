@@ -55,7 +55,7 @@ documents$UID[1]
 
 ### Write
 
-write.csv(documents,'../Data/upr-info-binary.org', row.names = F)
+write.csv(documents,'../Data/upr-info-binary.csv', row.names = F)
 
 
 
