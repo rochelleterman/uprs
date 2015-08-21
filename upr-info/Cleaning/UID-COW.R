@@ -9,7 +9,7 @@ library(plyr)
 #### Load Data ####
 ######################
 
-documents <- read.csv('../Data/upr-info-clusters.csv', stringsAsFactors = F)
+documents <- read.csv('../Data/upr-info.csv', stringsAsFactors = F)
 
 ######################
 #### Country Codes ####

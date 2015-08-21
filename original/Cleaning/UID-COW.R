@@ -21,15 +21,15 @@ names(documents)
 # make 3letter codes for country labels
 documents$To_COW <- countrycode(documents$To, "country.name", "cowc")
 unique(documents$To[is.na(documents$To_COW)])
-documents$To_COW[documents$To=="Serbia"] <- "SRB"
-documents$To_COW[documents$To=="serbia"] <- "SRB"
+documents$To_COW[documents$To=="Serbia"] <- "YUG"
+documents$To_COW[documents$To=="serbia"] <- "YUG"
 documents$To_COW[documents$To=="kyrgysztan"] <- "KYR"
 documents$From_COW[documents$From=="North Korea"] <- "PKR"
 documents$To_COW <- as.factor(documents$To_COW)
 
 documents$From_COW <- countrycode(documents$From, "country.name", "cowc")
 unique(documents$From[is.na(documents$From_COW)])
-documents$From_COW[documents$From=="Serbia"] <- "SRB"
+documents$From_COW[documents$From=="Serbia"] <- "YUG"
 documents$From_COW[documents$From=="Palestine"] <- "PLST"
 documents$From_COW <- as.factor(documents$From_COW)
 
