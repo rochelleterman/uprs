@@ -10,8 +10,7 @@ library(reshape2)
 #### Load Data ####
 ######################
 
-documents <- read.csv('~/Dropbox/berkeley/Dissertation/Data and Analyais/Git Repos/uprs/original/Data/upr-orig.csv', stringsAsFactors = F)
-
+documents <- read.csv('~/Dropbox/berkeley/Dissertation/Data and Analyais/Git Repos/uprs/original/Data/upr-orig-binary.csv', stringsAsFactors = F)
 names(documents)
 
 ######################
@@ -83,7 +82,6 @@ x.2 <- merge(second, session.second,all.x = T)
 documents <- rbind(x.1,x.2)
 
 # rename Year
-
 names(documents)[2] <- "Report_Year"
 
 
@@ -117,5 +115,4 @@ names(documents)
 documents = documents[,c("UID","Session","Session_Year","Report_Year","To","To_COW","From","From_COW","Text","Decision")]
 
 ### Write
-
-write.csv(documents,'~/Dropbox/berkeley/Dissertation/Data and Analyais/Git Repos/uprs/original/Data/upr-orig.csv', row.names = F)
+write.csv(documents,'~/Dropbox/berkeley/Dissertation/Data and Analyais/Git Repos/uprs/original/Data/upr-orig-binary.csv', row.names = F)
