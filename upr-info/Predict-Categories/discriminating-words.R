@@ -13,31 +13,25 @@ library(irr)
 
 documents <- read.csv('../Data/upr-info-binary.csv', stringsAsFactors = F)
 
-# take out voluntary pledges
-documents <- documents[!documents$Response=="Voluntary Pledge",]
-
-# should be 41066
-nrow(documents)
-
 # Prepare Corpus
 docs <- Corpus(VectorSource(documents$Text))
 docs
 
 # Make DTM
 dtm <- DocumentTermMatrix(docs,
-                          control = list(tolower = TRUE,
-                                         stopwords = T,
+                          control = list(weighting =function(x) weightTfIdf(x, normalize = TRUE),
+                                         tolower = TRUE,
+                                         stopwords = TRUE,
                                          removeNumbers = TRUE,
                                          removePunctuation = TRUE,
-                                         stemming=TRUE)
-                          )
+                                         stemming=TRUE))
 
 dim(dtm)
 # coerce into dataframe
 dtm <- as.data.frame(as.matrix(dtm))
 
 # add issue matrix
-themes <- documents[,17:70]
+themes <- documents[,18:71]
 
 ###########################
 #### Scoring Functions ####
@@ -63,10 +57,13 @@ smd <- function(theme){
   num <- (means.one - means.rest) 
   denom <- sqrt((var.one/3) + (var.rest/3))
   score <- num / denom
-
-  # sort and view
+  
+  # score
   score <- sort(score)
-  score <- tail(score,100) # top  words
+  score <- tail(score, 50)
+  return(cbind(score))
+  
+  # sort and view
   return(cbind(score))
 }
 
@@ -90,10 +87,10 @@ log.odds <- function(theme){
 
   log.odds.ratio <- log(pi.one/(1-pi.one)) - log(pi.rest / (1-pi.rest))
   st.log.odds <- log.odds.ratio/sqrt(var(log.odds.ratio))
-
-  st.log.odds <- sort(st.log.odds)
-  score <- tail(st.log.odds,50) # top one words
   
+  # sort
+  score <- sort(st.log.odds)
+  score <- tail(score, 50)
   return(cbind(score))
 }
 
@@ -114,63 +111,62 @@ diff.prop <- function(theme){
   
   score <- unlist(means.one - means.rest)
   score <- sort(score)
-  score <- tail(score, 100)
+  score <- tail(score, 50)
   return(cbind(score))
 }
+
+# scoring function 
+score <- function(measure, data){
+  
+  # Score each document
+  M <- data[,colnames(data) %in% rownames(measure)]
+  y <- measure[,1]
+  x <- apply(M, 1, function(x) sum(x * y))
+  
+  # put Scores in a data frame
+  a <- as.data.frame(cbind(x))
+  names(a) <- "Score"
+  a$Score <- as.numeric(a$Score)
+  
+  return(a)
+}
+
 
 ################################
 ##### Testing Classification ###
 ################################
 
-# make a score
-children <- smd("Rights.of.the.Child")
+# make a matrix
 children <- log.odds("Rights.of.the.Child")
-children <- diff.prop("Rights.of.the.Child")
-migrants <- log.odds("Migrants")
+children <- smd("Rights.of.the.Child")
+children[1:5]
 
-# Score each document
-M <- dtm[,rownames(migrants)]
-y <- migrants[,1]
-x <- apply(M, 1, function(x) sum(x * y))
+# Score documents
+a <- score(children, dtm)
+a$True <- themes$Rights.of.the.Child
 
-# put Scores in a data frame
-a <- as.data.frame(cbind(x))
-names(a) <- "Score"
-a$Score <- as.numeric(a$Score)
+summary(a$Score[a$True == 1])
+summary(a$Score[a$True == 0])
 
-# add column indicating whether True value and compare scores
-a$True <- documents$Migrants
-summary(a$Score[a$True==1])
-summary(a$Score[a$True==0])
+plot(True ~ Score, data = a)
 
-# Model
-mod1 <- glm(True ~ Score, data = a, family = binomial(logit))
-summary(mod1)
-
-# Predict values
-a$Predict <- predict(mod, newdata = a, type = "response")
-
-threshold <- .1
-predictedTrue <- which(a$Predict>threshold)
-a$Predict[predictedTrue] <- 1
-a$Predict[-predictedTrue] <- 0
+# Predict
+threshold = .3
+t <- which(a$Score >= .3)
+a$Predict <- NA
+a$Predict[t] <- 1
+a$Predict[-t] <- 0
 
 ###############################
-##### Evaluation Metrics #######
+##### Evaluation Metrics ######
 ###############################
 
 # create kappa value
-ratings <- data.frame(cbind(a$True, a$Predict))
+ratings <- a[,c(2,3)]
 kappa2(ratings)
 
-# smd: 0.657
-# standard log odds - children: 0.743 
-# standard log odds - women: 0.825
-# stanrd log offs - migrants: 0.845
-# st. log odds - migrants, 50 words: .807
-
 # % agree 
-length(which(a$Predict == a$True)) / nrow(a) ## .93 not bad!
+length(which(a$Predict == a$True)) / nrow(a) ## 0.9345687
 
 # f-scores n such
 retrieved <- sum(a$Predict)
@@ -181,34 +177,27 @@ recall
 Fmeasure <- 2 * precision * recall / (precision + recall)
 Fmeasure
 
+####################
+##### Amnesty ######
+####################
 
-# standard log odds with 1000 word dtm: .627
-# diff prop: .65
+# orig corpus
+myCorpus <- corpus(documents$Text, docvars=documents[,-5])
+myStemMat <- dfm(myCorpus, stopwords=TRUE, stem=TRUE, ignoredFeatures=stopwords("english"))
+#x <- as.matrix(myStemMat)
 
+# amnesty corpus
+a <- read.csv("total_amnesty2.csv", stringsAsFactors = F)
+a <- a[!is.na(a$teaser),]
 
-####### Word scores
+# make dtm
+a.c <- corpus(a$teaser)
+a.c <- dfm(a.c, stopwords=TRUE, stem=TRUE, ignoredFeatures=stopwords("english"))
+ac2 <- selectFeatures(a.c, features(myStemMat))
 
-theme = "Rights.of.the.Child"
-index.one <- which(themes[[theme]]==1 & rowSums(themes)==1)
-index.rest <- which(themes[[theme]]==0)
+acm <- as.matrix(ac2)
+acm <- as.data.frame(ac2)
 
-# Subset into 2 dtms
-one <- dtm[index.one,] 
-rest <- dtm[index.rest,]
-one <- colSums(one)
-rest <- colSums(rest)
-df <- data.frame(rbind(one,rest))
-
-# convert DTM to probabilities
-m <- df / rowSums(df) # counts to frequencies
-m[,1:5]
-prob <- sweep(m,2,colSums(m, na.rm=T),`/`) # probability matrix
-prob[,1:5]
-prob[2,] <- prob[2,] * -1
-prob[,1:5]
-
-# create final word scores
-scores <- colSums(prob, na.rm = T)
-
-# apply scores
-x <- apply(dtm, 1, function(x) sum((x * scores), na.rm = T))
+x <- score(children, acm)
+x$keywords <- a$keywords
+x$text <-a$teaser

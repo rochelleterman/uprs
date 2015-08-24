@@ -16,9 +16,6 @@ setwd("~/Dropbox/berkeley/Dissertation/Data and Analyais/Git Repos/uprs/upr-info
 
 documents <- read.csv('../Data/upr-info-binary.csv', stringsAsFactors = F)
 
-# take out voluntary pledges
-documents <- documents[!documents$Response=="Voluntary Pledge",]
-
 # should be 41066
 nrow(documents)
 
@@ -42,7 +39,7 @@ doc_matrix <- create_matrix(documents$Text, language="english", removeNumbers=TR
 dim(doc_matrix)
 
 # CREATE CONTAINER
-container <- create_container(doc_matrix, documents$Women.s.rights, trainSize=training,
+container <- create_container(doc_matrix, documents$Rights.of.the.Child, trainSize=training,
                               testSize=test, virgin=F)
 
 # RUN NINE DIFFERENT TRAINING MODELS
@@ -68,8 +65,10 @@ TREE_CLASSIFY <- classify_model(container, TREE)
 
 analytics <- create_analytics(container,
                               cbind(SVM_CLASSIFY, SLDA_CLASSIFY,#MAXENT_CLASSIFY,
-                                    BOOSTING_CLASSIFY,BAGGING_CLASSIFY,RF_CLASSIFY,
-                                    TREE_CLASSIFY))
+                                    BOOSTING_CLASSIFY,BAGGING_CLASSIFY
+                                    #,RF_CLASSIFY,
+                                    #TREE_CLASSIFY
+                                    ))
 summary(analytics)
 
 # analytics@algorithm_summary: SUMMARY OF PRECISION, RECALL, F-SCORES, AND ACCURACY SORTED BY TOPIC CODE FOR EACH ALGORITHM
