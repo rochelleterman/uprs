@@ -4,14 +4,13 @@ setwd("~/Dropbox/berkeley/Dissertation/Data and Analyais/Git Repos/uprs/upr-info
 library(corrgram)
 library(pvclust)
 library(countrycode)
-library(matrixStats)
 library(lsa)
 library('dendextend')
 library('dendextendRcpp')
 library(ggplot2)
 library(readstata13)
 library(plyr)
-library(dplyr)
+library(matrixStats)
 
 ######################
 #### Prepare Data ####
@@ -19,17 +18,11 @@ library(dplyr)
 
 documents <- read.csv('../Data/upr-info-binary.csv', stringsAsFactors = F)
 
-# take out voluntary pledges
-documents <- documents[!documents$Response=="Voluntary Pledge",]
-
-# write
-write.csv(documents, "../Data/Recs-only/upr-info-recs-binary.csv")
-
 # should be 41066
 nrow(documents)
 
 # subset
-recs <- documents[,c(4,8,2,17:70)] # just keep to, from, session, issues
+recs <- documents[,c(4,8,2,18:71)] # just keep to, from, session, issues
 
 # REPORT as unit of observation
 temp = recs[,c(1,3,4:57)] # keep to, session, issues
@@ -49,15 +42,14 @@ row.names(sender) <- sender$From_COW
 sender$From_COW <- NULL
 
 # INSTITUTIONS as obs.
-inst <- documents[,c(71:123)] # just institutions
+inst <- documents[,c(72:124)] # just institutions
 
 ###########################
 #### Descriptive Stats ###
 ##########################
-
 # number of recs per report
 temp = recs[,c(1,3,4:57)] # keep to, session, issues
-n.report <- count(temp, c("To_COW","Session"))
+n.report <- count(temp, vars = c("To_COW", "Session"))
 n.report <- arrange(n.report, freq)
 
 # number of recs per institution
@@ -98,7 +90,9 @@ sum(n.sender$freq) # should be 41066
 n.sender$Proportions <- n.sender$freq/41066
 write.csv(n.sender,"Results/Descriptive/recs-per-sender.csv")
 
-topSender <- head(n.sender[order(n.sender$freq, decreasing = T),],20)
+topSender <- n.sender[order(n.sender$freq, decreasing = T),]
+topSender <- topSender[topSender$freq > 500,]
+
 names(topSender)
 topSender$Country <- ordered(topSender$From_COW, levels = topSender$From_COW)
 
@@ -106,7 +100,7 @@ topSender  %>%
   ggplot(aes(Country, freq)) +
   geom_point (stat ="identity") +
   theme(axis.text.x=element_text(angle=45,hjust=1)) +
-  ggtitle("10 Most Active Countriess")
+  ggtitle("Most Active Countries")
 
 # keep only those who give at least 100 recs
 n.sender.100 <- n.sender[n.sender$freq > 100,]
@@ -117,9 +111,9 @@ write.csv(n.sender.100,"Results/Descriptive/recs-per-sender-100.csv")
 recs.100 <- recs[recs$From_COW %in% n.sender.100$From_COW,]
 nrow(recs.100) / nrow(recs)
 
-# summary of senders and themes
+##### summary of senders and themes
 
-# normalize
+# normalize sender props
 sender.norm <- sweep(sender.100,2,colSums(sender.100),`/`)
 sum(sender.norm$Asylum.seekers...refugees) # should be 1
 write.csv(sender.norm, "Results/Descriptive/prop-themes-per-sender.csv")
@@ -222,6 +216,10 @@ n.cluster <- data.frame(cluster,counts)
 n.cluster$proportions <- n.cluster$count/nrow(recs)
 n.cluster$cluster <- ordered(n.cluster$cluster, levels = n.cluster$cluster)
 n.cluster
+
+sum(n.cluster$proportions)
+
+x <- rowSums(themes)
 
 # save it
 write.csv(n.cluster,"Results/Clustering/recs-per-cluster.csv")
@@ -427,3 +425,10 @@ ap <- parallel(subject=nrow(sender.100),var=ncol(sender.100),
 nS <- nScree(x=ev$values, aparallel=ap$eigen$qevpea)
 plotnScree(nS)
 
+#########################
+#### Network Graphs ####
+#########################
+
+network <- count(documents, vars = c("To_COW", "From_COW"))
+names(network) <- c("source","target","value")
+write.csv(network,"network.csv", row.names = F)
