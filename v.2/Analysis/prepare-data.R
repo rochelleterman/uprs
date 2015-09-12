@@ -46,4 +46,4 @@ sender$From_COW <- NULL
 # INSTITUTIONS as obs.
 inst <- documents[,c(72:124)] # just institutions
 
-save(recs, reports, themes, sender, inst, file = "datasets.RData")
+save(recs, reports, themes, sender, inst, file = "Data/datasets.RData")

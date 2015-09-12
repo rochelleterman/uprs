@@ -18,7 +18,7 @@ library(plyr)
 ######################
 
 documents <- read.csv('../Data/upr-info-binary.csv', stringsAsFactors = F)
-load("datasets.RData")
+load("Data/datasets.RData")
 
 # should be 41066
 nrow(documents)
@@ -93,7 +93,7 @@ topSender  %>%
 # keep only those who give at least 100 recs
 n.sender.100 <- n.sender[n.sender$freq > 100,]
 sender.100 <- sender[row.names(sender) %in% n.sender.100$From_COW,]
-save(sender.100, file = "sender-100.RData")
+save(sender.100, file = "Data/sender-100.RData")
 write.csv(n.sender.100,"Results/Descriptive/recs-per-sender-100.csv")
 
 # number of recs with only >100 senders
