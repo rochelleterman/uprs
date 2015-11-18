@@ -17,9 +17,9 @@ library(plyr)
 #### Prepare Data ####
 ######################
 
-documents <- read.csv('../Data/upr-info-binary.csv', stringsAsFactors = F)
-load("datasets.RData")
-load("sender-100.RData")
+#documents <- read.csv('../Data/upr-info-binary.csv', stringsAsFactors = F)
+load("Data/datasets.RData")
+load("Data/sender-100.RData")
 
 #############################
 #### Clustering - theme ###

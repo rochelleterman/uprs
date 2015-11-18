@@ -12,7 +12,7 @@ library('dendextendRcpp')
 library(ggplot2)
 library(readstata13)
 library(plyr)
-library(matrixStats)
+#library(matrixStats)
 
 ######################
 #### Prepare Data ####
@@ -43,7 +43,13 @@ sender <- sender[!is.na(sender$From_COW),]
 row.names(sender) <- sender$From_COW
 sender$From_COW <- NULL
 
+# keep only those who give at least 100 recs
+recs$From_COW <- as.factor(recs$From_COW)
+n.sender <- count(documents, "From_COW")
+n.sender.100 <- n.sender[n.sender$freq >= 100,]
+sender.100 <- sender[row.names(sender) %in% n.sender.100$From_COW,]
+
 # INSTITUTIONS as obs.
 inst <- documents[,c(72:124)] # just institutions
 
-save(recs, reports, themes, sender, inst, file = "Data/datasets.RData")
+save(documents, recs, reports, themes, sender, sender.100, inst, file = "Data/datasets.RData")

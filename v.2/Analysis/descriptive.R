@@ -17,7 +17,7 @@ library(plyr)
 #### Prepare Data ####
 ######################
 
-documents <- read.csv('../Data/upr-info-binary.csv', stringsAsFactors = F)
+# documents <- read.csv('../Data/upr-info-binary.csv', stringsAsFactors = F)
 load("Data/datasets.RData")
 
 # should be 41066
@@ -30,6 +30,8 @@ nrow(documents)
 temp = recs[,c(1,3,4:57)] # keep to, session, issues
 n.report <- count(temp, vars = c("To_COW", "Session"))
 n.report <- arrange(n.report, freq)
+head(n.report, 1) # min
+tail(n.report, 1) # max
 
 #######################################
 #### Number of recs per INSTITUTION ###
@@ -91,9 +93,7 @@ topSender  %>%
   ggtitle("Most Active Countries")
 
 # keep only those who give at least 100 recs
-n.sender.100 <- n.sender[n.sender$freq > 100,]
-sender.100 <- sender[row.names(sender) %in% n.sender.100$From_COW,]
-save(sender.100, file = "Data/sender-100.RData")
+n.sender.100 <- n.sender[n.sender$freq >= 100,]
 write.csv(n.sender.100,"Results/Descriptive/recs-per-sender-100.csv")
 
 # number of recs with only >100 senders
@@ -124,3 +124,11 @@ names(sender.norm)[12] # disappearances...?
 
 table(documents$Action)
 write.csv(table(documents$Action),"Results/Descriptive/Actions.csv")
+
+###########################
+#### SUMMARY OF RESPONSE ###
+###########################
+
+(x = table(documents$Response))
+# percentage accepted
+x[1] / (x[1] + x[2])
