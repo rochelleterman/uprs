@@ -1,4 +1,4 @@
-setwd("~/Dropbox/berkeley/Dissertation/Data and Analyais/Git Repos/uprs")
+setwd("~/Dropbox/berkeley/Git-Repos/uprs/v.1/Cleaning")
 
 # merge haiti
 all.orig <- read.csv("Data/all-data.csv")

@@ -1,7 +1,7 @@
 library(plyr)
 
 rm(list=ls())
-setwd("~/Dropbox/berkeley/Dissertation/Data and Analyais/Git Repos/uprs")
+setwd("~/Dropbox/berkeley/Git-Repos/uprs/v.1/Testing")
 rochelle <- read.csv("Testing-2/sample-binary.csv")
 erin <- read.csv("Testing-2/erin-binary.csv")
 

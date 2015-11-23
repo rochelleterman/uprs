@@ -1,7 +1,8 @@
 ### Merging Decisions
 
 rm(list=ls())
-setwd("~/Dropbox/berkeley/Dissertation/Data and Analyais/Git Repos/uprs/")
+setwd("~/Dropbox/berkeley/Git-Repos/uprs/v.2/Coding")
+
 
 library(corrgram)
 library(countrycode)
@@ -13,16 +14,16 @@ library(qdap)
 library(tm)
 
 # Load Data
-info <- read.csv('upr-info/Data/upr-info.csv', stringsAsFactors = F)
+info <- read.csv('../Data/upr-info.csv', stringsAsFactors = F)
 # take out voluntary pledges
 info <- info[!info$Response=="Voluntary Pledge",]
 
-write.csv(info, "upr-info/Data/upr-info.csv")
+write.csv(info, "../Data/upr-info.csv")
 
 info <- arrange(info, To_COW, From_COW, Session, Text)
 
 # original
-orig <- read.csv('original/Data/upr-orig.csv', stringsAsFactors = F)
+orig <- read.csv('../../v.1/Data/upr-orig.csv', stringsAsFactors = F)
 orig <- arrange(orig, To_COW, From_COW, Session, Text)
 
 ## get rid of starting numbers in text
@@ -97,7 +98,7 @@ info$uid.word <- NULL
 info$UID.1 <- NULL
 
 # write.csv
-write.csv(info, "upr-info/Data/upr-info.csv", row.names = F)
+write.csv(info, "../Data/upr-info.csv", row.names = F)
 
 info$Decision.Guess <- as.factor(info$Decision.Guess)
 summary(info$Decision.Guess)

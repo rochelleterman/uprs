@@ -1,5 +1,5 @@
 rm(list=ls())
-setwd("~/Dropbox/berkeley/Dissertation/Data and Analyais/Git Repos/uprs/Analysis/text-analysis")
+setwd("~/Dropbox/berkeley/Git-Repos/uprs/v.1/Analysis")
 library(stm)
 library(plyr)
 

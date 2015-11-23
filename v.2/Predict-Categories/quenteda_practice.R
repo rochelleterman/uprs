@@ -1,7 +1,7 @@
 library(quanteda)
 
 rm(list=ls())
-setwd("~/Dropbox/berkeley/Dissertation/Data and Analyais/Git Repos/uprs/upr-info/Predict-Categories")
+setwd("~/Dropbox/berkeley/Git-Repos/uprs/v.2/Predict-Categories")
 
 documents <- read.csv('../Data/upr-info-binary.csv', stringsAsFactors = F)
 documents <- documents[,c(1,2,4,8,11,18:71)]

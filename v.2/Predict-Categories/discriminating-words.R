@@ -1,5 +1,5 @@
 rm(list=ls())
-setwd("~/Dropbox/berkeley/Dissertation/Data and Analyais/Git Repos/uprs/upr-info/Analysis")
+setwd("~/Dropbox/berkeley/Git-Repos/uprs/v.2/Predict-Categories")
 
 library(tm)
 library(RTextTools) # a machine learning package for text classification written in R

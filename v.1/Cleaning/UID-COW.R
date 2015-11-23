@@ -1,5 +1,5 @@
 rm(list=ls())
-setwd("~/Dropbox/berkeley/Dissertation/Data and Analyais/Git Repos/uprs/original/Cleaning")
+setwd("~/Dropbox/berkeley/Git-Repos/uprs/v.1/Cleaning")
 
 library(countrycode)
 library(matrixStats)
