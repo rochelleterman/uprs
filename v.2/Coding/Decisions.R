@@ -1,8 +1,13 @@
 ### Merging Decisions
 
+## So once upon a time, I scraped UPR data from working group reports, including info on
+## the decision / response of SuR to individual recommendations ('support', 'reject', 'consider', etc).
+## Then we got new data, but with a blunter metric of response ('accepted' or 'noted').
+## So this script attempts to merge the new data with the old, in order to get
+## the original decision variable.
+
 rm(list=ls())
 setwd("~/Dropbox/berkeley/Git-Repos/uprs/v.2/Coding")
-
 
 library(corrgram)
 library(countrycode)
@@ -13,13 +18,11 @@ library(plyr)
 library(qdap)
 library(tm)
 
-# Load Data
+# new data
 info <- read.csv('../Data/upr-info.csv', stringsAsFactors = F)
 # take out voluntary pledges
 info <- info[!info$Response=="Voluntary Pledge",]
-
-write.csv(info, "../Data/upr-info.csv")
-
+# arrange
 info <- arrange(info, To_COW, From_COW, Session, Text)
 
 # original
@@ -100,6 +103,7 @@ info$UID.1 <- NULL
 # write.csv
 write.csv(info, "../Data/upr-info.csv", row.names = F)
 
+# how'd we do?
 info$Decision.Guess <- as.factor(info$Decision.Guess)
 summary(info$Decision.Guess)
 levels(info$Decision.Guess)

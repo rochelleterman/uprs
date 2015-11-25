@@ -1,3 +1,7 @@
+## This script applies codes to the UPR recommendation data (upr-info-binary.csv):
+## 1. To/From country codes, using COW codes
+## 2. Unique IDs for each rec, which will help in merging it with the upr-orig data.
+
 rm(list=ls())
 setwd("~/Dropbox/berkeley/Git-Repos/uprs/v.2/Cleaning")
 
@@ -56,10 +60,6 @@ documents$UID[1]
 ### Write
 write.csv(documents,'../Data/upr-info-binary.csv', row.names = F)
 
-
-
-
-
 ### Get Country Sessions Data
 
 x <- documents[,c("To","To_COW","Session")]
@@ -67,4 +67,4 @@ x <- unique(x)
 x <- arrange(x, Session)
 x
 
-write.csv(x, "sessions.csv")
+# write.csv(x, "sessions.csv")
